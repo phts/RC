@@ -1,0 +1,17 @@
+{
+  "name": "remote-control",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phts/remote-control.git"
+  },
+  "author": "Phil Tsaryk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phts/remote-control/issues"
+  },
+  "homepage": "https://github.com/phts/remote-control#readme"
+}
