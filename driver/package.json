@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "lint": "eslint .",
+    "start": "node index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -13,5 +16,18 @@
   "bugs": {
     "url": "https://github.com/phts/remote-control/issues"
   },
-  "homepage": "https://github.com/phts/remote-control#readme"
+  "homepage": "https://github.com/phts/remote-control#readme",
+  "dependencies": {
+    "node-key-sender": "^1.0.11",
+    "ps-list": "^6.3.0"
+  },
+  "devDependencies": {
+    "@phts/eslint-config": "^1.4.2",
+    "@phts/prettier-config": "^1.0.0",
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "mappings": {
+    "play": [
+      { "if": { "running": "app.exe" }, "key": "space" },
+      { "exec": ["app2", "/play"] }
+    ]
+  }
+}

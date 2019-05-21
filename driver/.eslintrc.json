@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "@phts",
+    "@phts/eslint-config/addons/es6",
+    "@phts/eslint-config/addons/node",
+    "@phts/eslint-config/addons/jest"
+  ]
+}
