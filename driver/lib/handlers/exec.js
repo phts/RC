@@ -11,8 +11,10 @@ module.exports = function exec(action) {
   if (Array.isArray(exec)) {
     const [app, ...args] = exec
     execFileSync(app, args)
-  } else {
+  } else if (typeof exec === 'string') {
     execFileSync(exec)
+  } else {
+    throw new Error('"exec" must be a string or an array')
   }
 
   return true

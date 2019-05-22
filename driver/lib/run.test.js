@@ -56,6 +56,14 @@ describe('run', () => {
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app', ['arg1', 'arg2'])
     })
+
+    it('rejects error if "exec" has wrong type', async () => {
+      actions = {
+        exec: {wrong: 'type'},
+      }
+
+      await expect(run(actions)).rejects.toThrow('"exec" must be a string or an array')
+    })
   })
 
   describe('when single key action', () => {
