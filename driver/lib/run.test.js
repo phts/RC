@@ -147,4 +147,18 @@ describe('run', () => {
       expect(execFileSync).toHaveBeenCalledWith('app', [])
     })
   })
+
+  describe('when multiple actions are mixed into one', () => {
+    it('runs only first one alphabetically', async () => {
+      actions = {
+        exec: ['app', 'arg1'],
+        key: 'space',
+      }
+      await run(actions)
+
+      expect(execFileSync).toHaveBeenCalledTimes(1)
+      expect(execFileSync).toHaveBeenCalledWith('app', ['arg1'])
+      expect(ks.sendKey).not.toHaveBeenCalled()
+    })
+  })
 })
