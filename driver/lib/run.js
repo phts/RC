@@ -2,7 +2,7 @@
 
 const handlers = require('./handlers')
 
-async function runAction(action) {
+function runAction(action) {
   return handlers(action)
 }
 
