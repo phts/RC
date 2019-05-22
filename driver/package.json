@@ -19,7 +19,8 @@
   "homepage": "https://github.com/phts/remote-control#readme",
   "dependencies": {
     "node-key-sender": "^1.0.11",
-    "ps-list": "^6.3.0"
+    "ps-list": "^6.3.0",
+    "require-directory": "^2.1.1"
   },
   "devDependencies": {
     "@phts/eslint-config": "^1.4.2",
