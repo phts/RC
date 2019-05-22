@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@phts/eslint-config": "^1.4.2",
-    "@phts/prettier-config": "^1.0.0",
+    "@phts/prettier-config": "^1.0.1",
     "eslint": "^5.16.0",
     "jest": "^24.8.0"
   },
