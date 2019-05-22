@@ -8,9 +8,13 @@ module.exports = async function key(action) {
     return false
   }
 
-  if (typeof key !== 'string') {
-    throw new Error('"key" must be a string')
+  if (Array.isArray(key)) {
+    await ks.sendCombination(key)
+  } else if (typeof key === 'string') {
+    await ks.sendKey(key)
+  } else {
+    throw new Error('"key" must be a string or an array')
   }
-  await ks.sendKey(key)
+
   return true
 }

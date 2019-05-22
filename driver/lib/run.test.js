@@ -8,6 +8,7 @@ const run = require('./run')
 
 jest.mock('node-key-sender', () => ({
   sendKey: jest.fn(),
+  sendCombination: jest.fn(),
 }))
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('child_process', () => ({
@@ -23,7 +24,7 @@ describe('run', () => {
     ks.sendKey.mockClear()
   })
 
-  describe('when single exec action', () => {
+  describe('when "exec" action', () => {
     it('executes the specified file without args (as array)', async () => {
       actions = {
         exec: ['app'],
@@ -66,8 +67,8 @@ describe('run', () => {
     })
   })
 
-  describe('when single key action', () => {
-    it('sends the specified key press', async () => {
+  describe('when "key" action', () => {
+    it('sends the specified key press if passed string', async () => {
       actions = {
         key: 'space',
       }
@@ -78,12 +79,24 @@ describe('run', () => {
       expect(ks.sendKey).toHaveBeenCalledWith('space')
     })
 
-    it('rejects if key not a string', async () => {
+    it('sends the speccified key combination if passed array', async () => {
       actions = {
-        key: ['not string'],
+        key: ['shift', 'space'],
+      }
+      await run(actions)
+
+      expect(execFileSync).not.toHaveBeenCalled()
+      expect(ks.sendKey).not.toHaveBeenCalled()
+      expect(ks.sendCombination).toHaveBeenCalledTimes(1)
+      expect(ks.sendCombination).toHaveBeenCalledWith(['shift', 'space'])
+    })
+
+    it('rejects if "key" has wrong type', async () => {
+      actions = {
+        key: {wrong: 'type'},
       }
 
-      await expect(run(actions)).rejects.toThrow('"key" must be a string')
+      await expect(run(actions)).rejects.toThrow('"key" must be a string or an array')
     })
   })
 
