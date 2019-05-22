@@ -1,9 +1,10 @@
 {
   "mappings": {
-    "play": [
-      { "if": { "running": "app.exe" }, "key": "space" },
-      { "exec": ["app2", "/play"] }
-    ],
+    "play": {
+      "if": { "running": "app.exe" },
+      "then": { "key": "space" },
+      "else": { "exec": ["app2.exe", "/play"] }
+    },
     "stop": { "key": "space" },
     "open": { "exec": ["app3.exe"] },
     "fun1": [
