@@ -3,6 +3,12 @@
     "play": [
       { "if": { "running": "app.exe" }, "key": "space" },
       { "exec": ["app2", "/play"] }
+    ],
+    "stop": { "key": "space" },
+    "open": { "exec": ["app3.exe"] },
+    "fun1": [
+      { "exec": ["app4.exe"] },
+      { "key": "space" }
     ]
   }
 }

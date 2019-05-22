@@ -24,11 +24,9 @@ describe('run', () => {
 
   describe('when single exec action', () => {
     it('executes the specified file without args', async () => {
-      actions = [
-        {
-          exec: ['app'],
-        },
-      ]
+      actions = {
+        exec: ['app'],
+      }
       await run(actions)
 
       expect(ks.sendKey).not.toHaveBeenCalled()
@@ -37,11 +35,9 @@ describe('run', () => {
     })
 
     it('executes the specified file with args', async () => {
-      actions = [
-        {
-          exec: ['app', 'arg1', 'arg2'],
-        },
-      ]
+      actions = {
+        exec: ['app', 'arg1', 'arg2'],
+      }
       await run(actions)
 
       expect(ks.sendKey).not.toHaveBeenCalled()
@@ -52,11 +48,9 @@ describe('run', () => {
 
   describe('when single key action', () => {
     it('sends the specified key press', async () => {
-      actions = [
-        {
-          key: 'space',
-        },
-      ]
+      actions = {
+        key: 'space',
+      }
       await run(actions)
 
       expect(execFileSync).not.toHaveBeenCalled()
@@ -65,13 +59,23 @@ describe('run', () => {
     })
 
     it('rejects if key not a string', () => {
-      actions = [
-        {
-          key: ['not string'],
-        },
-      ]
+      actions = {
+        key: ['not string'],
+      }
 
       expect(run(actions)).rejects.toThrow()
+    })
+  })
+
+  describe('when multiple actions', () => {
+    it('executes all actions', async () => {
+      actions = [{exec: ['app']}, {key: 'space'}]
+      await run(actions)
+
+      expect(ks.sendKey).toHaveBeenCalledTimes(1)
+      expect(ks.sendKey).toHaveBeenCalledWith('space')
+      expect(execFileSync).toHaveBeenCalledTimes(1)
+      expect(execFileSync).toHaveBeenCalledWith('app', [])
     })
   })
 })
