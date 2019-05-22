@@ -6,9 +6,10 @@
       "else": { "exec": ["app2.exe", "/play"] }
     },
     "stop": { "key": "space" },
-    "open": { "exec": ["app3.exe"] },
+    "open": { "exec": "app3.exe" },
+    "close": { "exec": ["app4.exe", "--with", "--args"] },
     "fun1": [
-      { "exec": ["app4.exe"] },
+      { "exec": "app5.exe" },
       { "key": "space" }
     ]
   }

@@ -24,7 +24,7 @@ describe('run', () => {
   })
 
   describe('when single exec action', () => {
-    it('executes the specified file without args', async () => {
+    it('executes the specified file without args (as array)', async () => {
       actions = {
         exec: ['app'],
       }
@@ -33,6 +33,17 @@ describe('run', () => {
       expect(ks.sendKey).not.toHaveBeenCalled()
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app', [])
+    })
+
+    it('executes the specified file without args (as string)', async () => {
+      actions = {
+        exec: 'app',
+      }
+      await run(actions)
+
+      expect(ks.sendKey).not.toHaveBeenCalled()
+      expect(execFileSync).toHaveBeenCalledTimes(1)
+      expect(execFileSync).toHaveBeenCalledWith('app')
     })
 
     it('executes the specified file with args', async () => {

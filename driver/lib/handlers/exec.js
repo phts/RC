@@ -8,7 +8,12 @@ module.exports = function exec(action) {
     return false
   }
 
-  const [app, ...args] = exec
-  execFileSync(app, args)
+  if (Array.isArray(exec)) {
+    const [app, ...args] = exec
+    execFileSync(app, args)
+  } else {
+    execFileSync(exec)
+  }
+
   return true
 }
