@@ -1,10 +1,28 @@
 'use strict'
 
+const debounce = require('debounce')
 const settings = require('./settings.json')
 const run = require('./lib/run')
+const SerialPortReader = require('./lib/SerialPortReader')
 
-async function test() {
-  await run(settings.mappings.play)
-}
+const handle = debounce(
+  async button => {
+    const actions = settings.mappings[button]
+    if (!actions) {
+      console.warn(`Action not found for remote control button "${button}"`)
+      return
+    }
 
-setTimeout(test, 3000)
+    try {
+      await run(actions)
+    } catch (e) {
+      console.error(e.message)
+      process.exit(1)
+    }
+  },
+  settings.debounceDelay || 150,
+  true,
+)
+
+const reader = new SerialPortReader(settings.serialPort)
+reader.start(handle)
