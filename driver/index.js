@@ -1,7 +1,7 @@
 'use strict'
 
 const debounce = require('debounce')
-const settings = require('./settings.json')
+const settings = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
 
@@ -20,7 +20,7 @@ const handle = debounce(
       process.exit(1)
     }
   },
-  settings.debounceDelay || 150,
+  settings.debounceDelay,
   true,
 )
 
