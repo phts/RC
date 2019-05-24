@@ -69,6 +69,36 @@ void loop() {
     case 0x5EA138C7:
       Serial.println("mute");
       break;
+    case 0x5EA158A7:
+      Serial.println("volume_up");
+      break;
+    case 0x5EA1D827:
+      Serial.println("volume_down");
+      break;
+    case 0x5EA118E7:
+      Serial.println("coaxial");
+      break;
+    case 0x5EA1CA34:
+      Serial.println("optical");
+      break;
+    case 0x5EA19867:
+      Serial.println("line_1");
+      break;
+    case 0x5EA1837C:
+      Serial.println("line_2");
+      break;
+    case 0x5EA103FC:
+      Serial.println("line_3");
+      break;
+    case 0x5EA16897:
+      Serial.println("tuner");
+      break;
+    case 0x5EA128D7:
+      Serial.println("phono");
+      break;
+    case 0x5EA1A857:
+      Serial.println("cd");
+      break;
     default:
       Serial.println(results.value, HEX);
       break;
