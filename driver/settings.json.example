@@ -1,6 +1,7 @@
 {
   "serialPort": "COM# or /dev/tty-xxx",
   "debounceDelay": 150,
+  "noDebounce": ["volume_up", "volume_down"],
   "mappings": {
     "play": {
       "if": { "running": "app.exe" },

@@ -8,6 +8,7 @@ if (!rawSettings.serialPort) {
 
 const DEFAULT_SETTINGS = {
   debounceDelay: 150,
+  noDebounce: [],
   mappings: {},
 }
 
