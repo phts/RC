@@ -58,7 +58,7 @@ describe('run', () => {
       expect(execFileSync).toHaveBeenCalledWith('app', ['arg1', 'arg2'])
     })
 
-    it('rejects error if "exec" has wrong type', async () => {
+    it('rejects if "exec" has wrong type', async () => {
       actions = {
         exec: {wrong: 'type'},
       }
@@ -79,7 +79,7 @@ describe('run', () => {
       expect(ks.sendKey).toHaveBeenCalledWith('space')
     })
 
-    it('sends the speccified key combination if passed array', async () => {
+    it('sends the specified key combination if passed array', async () => {
       actions = {
         key: ['shift', 'space'],
       }
@@ -152,7 +152,7 @@ describe('run', () => {
         expect(ks.sendKey).toHaveBeenCalledWith('esc')
       })
 
-      it('does not run enaything if the condition is false and no "else" statement', async () => {
+      it('does not run anything if the condition is false and no "else" statement', async () => {
         psList.mockResolvedValue([{name: 'otherApp.exe'}, {name: 'otherApp2.exe'}])
         actions = {
           if: {running: 'app.exe'},
