@@ -39,5 +39,29 @@ Key mapping configuration is contained in `settings.json`. For example:
 }
 ```
 
-Key codes could be retrieved from
-[node-key-sender](https://www.npmjs.com/package/node-key-sender#list-of-key-codes) component.
+### Supported actions
+
+- Condition
+
+  - `running` - check if running application (using [ps-list](https://www.npmjs.com/package/ps-list))
+
+    ```json
+    {
+      "if": { "running": "mpc-hc.exe" },
+      "then": ["list of actions described below"],
+      "else": ["list of actions described below"]
+    }
+    ```
+
+- Emulate key press. Key codes could be retrieved from
+  [node-key-sender](https://www.npmjs.com/package/node-key-sender#list-of-key-codes)
+
+  ```json
+  { "key": "space" }
+  ```
+
+- Run application
+
+  ```json
+  { "exec": ["c:\\Program Files (x86)\\foobar2000\\foobar2000.exe", "/play"] }
+  ```
