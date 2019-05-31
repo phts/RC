@@ -2,6 +2,7 @@
 
 const ks = require('node-key-sender')
 const psList = require('ps-list')
+const robot = require('robotjs')
 const {execFileSync} = require('child_process')
 
 const run = require('./run')
@@ -11,6 +12,12 @@ jest.mock('node-key-sender', () => ({
   sendCombination: jest.fn(),
 }))
 jest.mock('ps-list', () => jest.fn(async () => {}))
+jest.mock('robotjs', () => ({
+  mouseClick: jest.fn(),
+  moveMouse: jest.fn(),
+  moveMouseSmooth: jest.fn(),
+  setMouseDelay: jest.fn(),
+}))
 jest.mock('child_process', () => ({
   execFileSync: jest.fn(),
 }))
@@ -19,9 +26,13 @@ describe('run', () => {
   let actions
 
   beforeEach(() => {
-    psList.mockReset()
     execFileSync.mockClear()
     ks.sendKey.mockClear()
+    psList.mockReset()
+    robot.mouseClick.mockClear()
+    robot.moveMouse.mockClear()
+    robot.moveMouseSmooth.mockClear()
+    robot.setMouseDelay.mockClear()
   })
 
   describe('when "exec" action', () => {
@@ -165,6 +176,88 @@ describe('run', () => {
         expect(ks.sendKey).not.toHaveBeenCalled()
         expect(execFileSync).not.toHaveBeenCalled()
       })
+    })
+  })
+
+  describe('when "mouse" action', () => {
+    it('does nothing if "robotjs" is not installed', async () => {
+      jest.resetModules()
+      jest.mock('robotjs', () => {
+        throw new Error('mock error')
+      })
+
+      const run2 = require('./run')
+      actions = {
+        mouse: [{moveSmooth: [33, 44]}, {click: 'right'}, {move: [111, 222]}],
+      }
+      await run2(actions)
+
+      expect(robot.mouseClick).not.toHaveBeenCalled()
+      expect(robot.moveMouse).not.toHaveBeenCalled()
+      expect(robot.moveMouseSmooth).not.toHaveBeenCalled()
+    })
+
+    it('rejects if mouse action is not supported', async () => {
+      actions = {
+        mouse: {unsupported: true},
+      }
+      await expect(run(actions)).rejects.toThrow(
+        '"mouse" must contain any of supported actions: click, delay, move, moveSmooth',
+      )
+    })
+
+    it('emulates mouse click if action is "click"', async () => {
+      actions = {
+        mouse: {click: 'left'},
+      }
+      await run(actions)
+
+      expect(robot.mouseClick).toHaveBeenCalledTimes(1)
+      expect(robot.mouseClick).toHaveBeenCalledWith('left')
+    })
+
+    it('sets mouse delay if action is "delay"', async () => {
+      actions = {
+        mouse: {delay: 30},
+      }
+      await run(actions)
+
+      expect(robot.setMouseDelay).toHaveBeenCalledTimes(1)
+      expect(robot.setMouseDelay).toHaveBeenCalledWith(30)
+    })
+
+    it('moves mouse if action is "move"', async () => {
+      actions = {
+        mouse: {move: [11, 22]},
+      }
+      await run(actions)
+
+      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouse).toHaveBeenCalledWith(11, 22)
+    })
+
+    it('moves mouse smoothly if action is "moveSmooth"', async () => {
+      actions = {
+        mouse: {moveSmooth: [11, 22]},
+      }
+      await run(actions)
+
+      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(11, 22)
+    })
+
+    it('is able to run multiple actions', async () => {
+      actions = {
+        mouse: [{moveSmooth: [33, 44]}, {click: 'right'}, {move: [111, 222]}],
+      }
+      await run(actions)
+
+      expect(robot.mouseClick).toHaveBeenCalledTimes(1)
+      expect(robot.mouseClick).toHaveBeenCalledWith('right')
+      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
+      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(33, 44)
     })
   })
 

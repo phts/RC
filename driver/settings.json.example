@@ -11,6 +11,9 @@
     "stop": { "key": "space" },
     "open": { "exec": "app3.exe" },
     "close": { "exec": ["app4.exe", "--with", "--args"] },
-    "fun1": [{ "exec": "app5.exe" }, { "key": "space" }]
+    "fun1": [{ "exec": "app5.exe" }, { "key": "space" }],
+    "fun2": {
+      "mouse": [{ "moveSmooth": [1600, 600] }, { "click": "left" }]
+    }
   }
 }
