@@ -202,7 +202,7 @@ describe('run', () => {
         mouse: {unsupported: true},
       }
       await expect(run(actions)).rejects.toThrow(
-        '"mouse" must contain any of supported actions: click, delay, move, moveSmooth',
+        '"mouse" must contain any of supported actions: click, delay, move, moveSmooth'
       )
     })
 

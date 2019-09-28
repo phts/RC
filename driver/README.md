@@ -53,17 +53,17 @@ Key mapping configuration is contained in `settings.json`. For example:
 {
   "mappings": {
     "play": {
-      "if": { "running": "mpc-hc.exe" },
-      "then": { "key": "space" },
-      "else": { "exec": ["c:\\Program Files (x86)\\foobar2000\\foobar2000.exe", "/play"] }
+      "if": {"running": "mpc-hc.exe"},
+      "then": {"key": "space"},
+      "else": {"exec": ["c:\\Program Files (x86)\\foobar2000\\foobar2000.exe", "/play"]}
     },
     "rew": {
-      "if": { "running": "mpc-hc.exe" },
-      "then": { "key": ["shift", "left"] }
+      "if": {"running": "mpc-hc.exe"},
+      "then": {"key": ["shift", "left"]}
     },
     "ff": {
-      "if": { "running": "mpc-hc.exe" },
-      "then": { "key": ["shift", "right"] }
+      "if": {"running": "mpc-hc.exe"},
+      "then": {"key": ["shift", "right"]}
     }
   }
 }
@@ -77,7 +77,7 @@ Key mapping configuration is contained in `settings.json`. For example:
 
     ```json
     {
-      "if": { "running": "mpc-hc.exe" },
+      "if": {"running": "mpc-hc.exe"},
       "then": ["list of actions described below"],
       "else": ["list of actions described below"]
     }
@@ -87,41 +87,41 @@ Key mapping configuration is contained in `settings.json`. For example:
   [node-key-sender](https://www.npmjs.com/package/node-key-sender#list-of-key-codes)
 
   ```json
-  { "key": "space" }
+  {"key": "space"}
   ```
 
 - Run application
 
   ```json
-  { "exec": ["c:\\Program Files (x86)\\foobar2000\\foobar2000.exe", "/play"] }
+  {"exec": ["c:\\Program Files (x86)\\foobar2000\\foobar2000.exe", "/play"]}
   ```
 
 - Control mouse
 
   ```json
-  { "mouse": ["set of mouse actions described below"] }
+  {"mouse": ["set of mouse actions described below"]}
   ```
 
   - `click`
 
     ```json
-    { "click": "left | right | middle" }
+    {"click": "left | right | middle"}
     ```
 
   - `delay`
 
     ```json
-    { "delay": 30 }
+    {"delay": 30}
     ```
 
   - `move`
 
     ```json
-    { "move": [1750, 100] }
+    {"move": [1750, 100]}
     ```
 
   - `moveSmooth`
 
     ```json
-    { "moveSmooth": [1750, 100] }
+    {"moveSmooth": [1750, 100]}
     ```

@@ -26,7 +26,7 @@ function runMouseAction(mouseAction) {
   }
 
   throw new Error(
-    '"mouse" must contain any of supported actions: ' + Object.keys(MOUSE_FNS).join(', '),
+    '"mouse" must contain any of supported actions: ' + Object.keys(MOUSE_FNS).join(', ')
   )
 }
 

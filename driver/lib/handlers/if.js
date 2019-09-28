@@ -31,6 +31,6 @@ module.exports = async function handleIf(action) {
     return true
   }
   throw new Error(
-    '"if" must use any of supported operators: ' + Object.keys(OPERATOR_FNS).join(', '),
+    '"if" must use any of supported operators: ' + Object.keys(OPERATOR_FNS).join(', ')
   )
 }
