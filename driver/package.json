@@ -29,9 +29,10 @@
   },
   "devDependencies": {
     "@phts/eslint-config": "^1.4.2",
-    "@phts/prettier-config": "^1.0.1",
+    "@phts/prettier-config": "^1.1.0",
     "eslint": "^5.16.0",
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2"
   },
   "jest": {
     "testEnvironment": "node"
