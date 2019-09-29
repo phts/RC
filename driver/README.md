@@ -5,9 +5,9 @@ and performs actions mapped for the particular button on a remote control.
 
 ## Install
 
-To support mouse actions by [robotjs](https://www.npmjs.com/package/robotjs)
-you have to install build tools. However this is not required for the whole application &mdash;
-if mouse actions are not needed then this step is not needed as well.
+To support keyboard and mouse actions by [robotjs](https://www.npmjs.com/package/robotjs)
+you have to install build tools first. However it is not required for the whole
+application &mdash; if you don't use keyboard/mouse actions then this step is not needed as well.
 
 - Windows
 
@@ -84,7 +84,7 @@ Key mapping configuration is contained in `settings.json`. For example:
     ```
 
 - Emulate key press. Key codes could be retrieved from
-  [node-key-sender](https://www.npmjs.com/package/node-key-sender#list-of-key-codes)
+  [robotjs](http://robotjs.io/docs/syntax#keys)
 
   ```json
   {"key": "space"}

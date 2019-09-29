@@ -1,18 +1,14 @@
 'use strict'
 
-const ks = require('node-key-sender')
 const psList = require('ps-list')
 const robot = require('robotjs')
 const {execFileSync} = require('child_process')
 
 const run = require('./run')
 
-jest.mock('node-key-sender', () => ({
-  sendKey: jest.fn(),
-  sendCombination: jest.fn(),
-}))
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('robotjs', () => ({
+  keyTap: jest.fn(),
   mouseClick: jest.fn(),
   moveMouse: jest.fn(),
   moveMouseSmooth: jest.fn(),
@@ -27,8 +23,8 @@ describe('run', () => {
 
   beforeEach(() => {
     execFileSync.mockClear()
-    ks.sendKey.mockClear()
     psList.mockReset()
+    robot.keyTap.mockClear()
     robot.mouseClick.mockClear()
     robot.moveMouse.mockClear()
     robot.moveMouseSmooth.mockClear()
@@ -42,7 +38,7 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(ks.sendKey).not.toHaveBeenCalled()
+      expect(robot.keyTap).not.toHaveBeenCalled()
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app', [])
     })
@@ -53,7 +49,7 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(ks.sendKey).not.toHaveBeenCalled()
+      expect(robot.keyTap).not.toHaveBeenCalled()
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app')
     })
@@ -64,7 +60,7 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(ks.sendKey).not.toHaveBeenCalled()
+      expect(robot.keyTap).not.toHaveBeenCalled()
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app', ['arg1', 'arg2'])
     })
@@ -86,8 +82,8 @@ describe('run', () => {
       await run(actions)
 
       expect(execFileSync).not.toHaveBeenCalled()
-      expect(ks.sendKey).toHaveBeenCalledTimes(1)
-      expect(ks.sendKey).toHaveBeenCalledWith('space')
+      expect(robot.keyTap).toHaveBeenCalledTimes(1)
+      expect(robot.keyTap).toHaveBeenCalledWith('space')
     })
 
     it('sends the specified key combination if passed array', async () => {
@@ -97,9 +93,8 @@ describe('run', () => {
       await run(actions)
 
       expect(execFileSync).not.toHaveBeenCalled()
-      expect(ks.sendKey).not.toHaveBeenCalled()
-      expect(ks.sendCombination).toHaveBeenCalledTimes(1)
-      expect(ks.sendCombination).toHaveBeenCalledWith(['shift', 'space'])
+      expect(robot.keyTap).toHaveBeenCalledTimes(1)
+      expect(robot.keyTap).toHaveBeenCalledWith('space', ['shift'])
     })
 
     it('rejects if "key" has wrong type', async () => {
@@ -125,7 +120,7 @@ describe('run', () => {
         then: {key: 'space'},
       }
       await expect(run(actions)).rejects.toThrow(
-        '"if" must use any of supported operators: running',
+        '"if" must use any of supported operators: running'
       )
     })
 
@@ -144,8 +139,8 @@ describe('run', () => {
         await run(actions)
 
         expect(psList).toHaveBeenCalledTimes(1)
-        expect(ks.sendKey).toHaveBeenCalledTimes(1)
-        expect(ks.sendKey).toHaveBeenCalledWith('space')
+        expect(robot.keyTap).toHaveBeenCalledTimes(1)
+        expect(robot.keyTap).toHaveBeenCalledWith('space')
       })
 
       it('runs "else" actions if the condition is false', async () => {
@@ -159,8 +154,8 @@ describe('run', () => {
         await run(actions)
 
         expect(psList).toHaveBeenCalledTimes(1)
-        expect(ks.sendKey).toHaveBeenCalledTimes(1)
-        expect(ks.sendKey).toHaveBeenCalledWith('esc')
+        expect(robot.keyTap).toHaveBeenCalledTimes(1)
+        expect(robot.keyTap).toHaveBeenCalledWith('esc')
       })
 
       it('does not run anything if the condition is false and no "else" statement', async () => {
@@ -173,7 +168,7 @@ describe('run', () => {
         await run(actions)
 
         expect(psList).toHaveBeenCalledTimes(1)
-        expect(ks.sendKey).not.toHaveBeenCalled()
+        expect(robot.keyTap).not.toHaveBeenCalled()
         expect(execFileSync).not.toHaveBeenCalled()
       })
     })
@@ -266,8 +261,8 @@ describe('run', () => {
       actions = [{exec: ['app']}, {key: 'space'}]
       await run(actions)
 
-      expect(ks.sendKey).toHaveBeenCalledTimes(1)
-      expect(ks.sendKey).toHaveBeenCalledWith('space')
+      expect(robot.keyTap).toHaveBeenCalledTimes(1)
+      expect(robot.keyTap).toHaveBeenCalledWith('space')
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app', [])
     })
@@ -283,7 +278,7 @@ describe('run', () => {
 
       expect(execFileSync).toHaveBeenCalledTimes(1)
       expect(execFileSync).toHaveBeenCalledWith('app', ['arg1'])
-      expect(ks.sendKey).not.toHaveBeenCalled()
+      expect(robot.keyTap).not.toHaveBeenCalled()
     })
   })
 })

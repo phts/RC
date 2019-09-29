@@ -1,12 +1,6 @@
 'use strict'
 
-let robot
-try {
-  robot = require('robotjs')
-} catch (er) {
-  console.warn('"robotjs" is not installed. Mouse actions are not supported.')
-  robot = null
-}
+const robot = require('optional')('robotjs')
 
 const MOUSE_FNS = {
   click: button => robot.mouseClick(button),
@@ -35,8 +29,8 @@ module.exports = function mouse(action) {
   if (!mouse) {
     return false
   }
-
   if (!robot) {
+    console.warn('"robotjs" is not installed. Mouse actions are not supported.')
     return true
   }
 
