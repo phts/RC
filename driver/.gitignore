@@ -1,3 +1,6 @@
 node_modules/
 
+*.bak
+*.bat
+
 settings.json
