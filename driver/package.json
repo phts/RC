@@ -28,11 +28,11 @@
     "robotjs": "^0.5.1"
   },
   "devDependencies": {
-    "@phts/eslint-config": "^1.4.2",
+    "@phts/eslint-config": "^1.8.1",
     "@phts/prettier-config": "^1.1.0",
-    "eslint": "^5.16.0",
-    "jest": "^24.8.0",
-    "prettier": "^1.18.2"
+    "eslint": "^6.8.0",
+    "jest": "^25.2.4",
+    "prettier": "^2.0.2"
   },
   "jest": {
     "testEnvironment": "node"
