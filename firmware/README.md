@@ -1,6 +1,6 @@
 # arduino-pc-remote-control: firmware
 
-![Circuit](https://raw.githubusercontent.com/phts/arduino-pc-remote-control/master/firmware/circuit.png)
+![Circuit](https://raw.githubusercontent.com/phts/arduino-pc-remote-control/master/firmware/doc/circuit.png)
 
 Requires [IRremote Arduino Library](http://z3t0.github.io/Arduino-IRremote/).
 
