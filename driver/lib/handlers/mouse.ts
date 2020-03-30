@@ -1,5 +1,3 @@
-'use strict'
-
 const robot = require('optional')('robotjs')
 
 const MOUSE_FNS = {

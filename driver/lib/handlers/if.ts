@@ -1,6 +1,4 @@
-'use strict'
-
-const psList = require('ps-list')
+import psList from 'ps-list'
 
 const OPERATOR_FNS = {
   running: async (operand) => !!(await psList()).find((x) => x.name === operand),

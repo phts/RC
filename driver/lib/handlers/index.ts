@@ -1,5 +1,3 @@
-'use strict'
-
 const handlers = require('require-directory')(module)
 
 async function runHandlers(action) {
@@ -9,6 +7,7 @@ async function runHandlers(action) {
       return true
     }
   }
+  return false
 }
 
-module.exports = runHandlers
+export default runHandlers

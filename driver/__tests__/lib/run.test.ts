@@ -1,10 +1,8 @@
-'use strict'
+import {execFileSync} from 'child_process'
+import psList from 'ps-list'
+import {keyTap, mouseClick, moveMouse, moveMouseSmooth, setMouseDelay} from 'robotjs'
 
-const {execFileSync} = require('child_process')
-const psList = require('ps-list')
-const robot = require('robotjs')
-
-const run = require('../../lib/run')
+import run from '../../lib/run'
 
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('robotjs', () => ({
@@ -18,17 +16,25 @@ jest.mock('child_process', () => ({
   execFileSync: jest.fn(),
 }))
 
+const psListMock = psList as jest.MockedFunction<typeof psList>
+const execFileSyncMock = execFileSync as jest.MockedFunction<typeof execFileSync>
+const keyTapMock = keyTap as jest.MockedFunction<typeof keyTap>
+const mouseClickMock = mouseClick as jest.MockedFunction<typeof mouseClick>
+const moveMouseMock = moveMouse as jest.MockedFunction<typeof moveMouse>
+const moveMouseSmoothMock = moveMouseSmooth as jest.MockedFunction<typeof moveMouseSmooth>
+const setMouseDelayMock = setMouseDelay as jest.MockedFunction<typeof setMouseDelay>
+
 describe('run', () => {
   let actions
 
   beforeEach(() => {
-    execFileSync.mockClear()
-    psList.mockReset()
-    robot.keyTap.mockClear()
-    robot.mouseClick.mockClear()
-    robot.moveMouse.mockClear()
-    robot.moveMouseSmooth.mockClear()
-    robot.setMouseDelay.mockClear()
+    execFileSyncMock.mockClear()
+    psListMock.mockReset()
+    keyTapMock.mockClear()
+    mouseClickMock.mockClear()
+    moveMouseMock.mockClear()
+    moveMouseSmoothMock.mockClear()
+    setMouseDelayMock.mockClear()
   })
 
   describe('when "exec" action', () => {
@@ -38,9 +44,9 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.keyTap).not.toHaveBeenCalled()
-      expect(execFileSync).toHaveBeenCalledTimes(1)
-      expect(execFileSync).toHaveBeenCalledWith('app', [])
+      expect(keyTapMock).not.toHaveBeenCalled()
+      expect(execFileSyncMock).toHaveBeenCalledTimes(1)
+      expect(execFileSyncMock).toHaveBeenCalledWith('app', [])
     })
 
     it('executes the specified file without args (as string)', async () => {
@@ -49,9 +55,9 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.keyTap).not.toHaveBeenCalled()
-      expect(execFileSync).toHaveBeenCalledTimes(1)
-      expect(execFileSync).toHaveBeenCalledWith('app')
+      expect(keyTapMock).not.toHaveBeenCalled()
+      expect(execFileSyncMock).toHaveBeenCalledTimes(1)
+      expect(execFileSyncMock).toHaveBeenCalledWith('app')
     })
 
     it('executes the specified file with args', async () => {
@@ -60,9 +66,9 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.keyTap).not.toHaveBeenCalled()
-      expect(execFileSync).toHaveBeenCalledTimes(1)
-      expect(execFileSync).toHaveBeenCalledWith('app', ['arg1', 'arg2'])
+      expect(keyTapMock).not.toHaveBeenCalled()
+      expect(execFileSyncMock).toHaveBeenCalledTimes(1)
+      expect(execFileSyncMock).toHaveBeenCalledWith('app', ['arg1', 'arg2'])
     })
 
     it('rejects if "exec" has wrong type', async () => {
@@ -81,9 +87,9 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(execFileSync).not.toHaveBeenCalled()
-      expect(robot.keyTap).toHaveBeenCalledTimes(1)
-      expect(robot.keyTap).toHaveBeenCalledWith('space')
+      expect(execFileSyncMock).not.toHaveBeenCalled()
+      expect(keyTapMock).toHaveBeenCalledTimes(1)
+      expect(keyTapMock).toHaveBeenCalledWith('space')
     })
 
     it('sends the specified key combination if passed array', async () => {
@@ -92,9 +98,9 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(execFileSync).not.toHaveBeenCalled()
-      expect(robot.keyTap).toHaveBeenCalledTimes(1)
-      expect(robot.keyTap).toHaveBeenCalledWith('space', ['shift'])
+      expect(execFileSyncMock).not.toHaveBeenCalled()
+      expect(keyTapMock).toHaveBeenCalledTimes(1)
+      expect(keyTapMock).toHaveBeenCalledWith('space', ['shift'])
     })
 
     it('rejects if "key" has wrong type', async () => {
@@ -126,10 +132,10 @@ describe('run', () => {
 
     describe('when operator if "running"', () => {
       it('runs "then" actions if the condition is true', async () => {
-        psList.mockResolvedValue([
-          {name: 'otherApp.exe'},
-          {name: 'app.exe'},
-          {name: 'otherApp2.exe'},
+        psListMock.mockResolvedValue([
+          {pid: 1, ppid: 2, name: 'otherApp.exe'},
+          {pid: 1, ppid: 2, name: 'app.exe'},
+          {pid: 1, ppid: 2, name: 'otherApp2.exe'},
         ])
         actions = {
           if: {running: 'app.exe'},
@@ -138,13 +144,16 @@ describe('run', () => {
 
         await run(actions)
 
-        expect(psList).toHaveBeenCalledTimes(1)
-        expect(robot.keyTap).toHaveBeenCalledTimes(1)
-        expect(robot.keyTap).toHaveBeenCalledWith('space')
+        expect(psListMock).toHaveBeenCalledTimes(1)
+        expect(keyTapMock).toHaveBeenCalledTimes(1)
+        expect(keyTapMock).toHaveBeenCalledWith('space')
       })
 
       it('runs "else" actions if the condition is false', async () => {
-        psList.mockResolvedValue([{name: 'otherApp.exe'}, {name: 'otherApp2.exe'}])
+        psListMock.mockResolvedValue([
+          {pid: 1, ppid: 2, name: 'otherApp.exe'},
+          {pid: 1, ppid: 2, name: 'otherApp2.exe'},
+        ])
         actions = {
           if: {running: 'app.exe'},
           then: {key: 'space'},
@@ -153,13 +162,16 @@ describe('run', () => {
 
         await run(actions)
 
-        expect(psList).toHaveBeenCalledTimes(1)
-        expect(robot.keyTap).toHaveBeenCalledTimes(1)
-        expect(robot.keyTap).toHaveBeenCalledWith('esc')
+        expect(psListMock).toHaveBeenCalledTimes(1)
+        expect(keyTapMock).toHaveBeenCalledTimes(1)
+        expect(keyTapMock).toHaveBeenCalledWith('esc')
       })
 
       it('does not run anything if the condition is false and no "else" statement', async () => {
-        psList.mockResolvedValue([{name: 'otherApp.exe'}, {name: 'otherApp2.exe'}])
+        psListMock.mockResolvedValue([
+          {pid: 1, ppid: 2, name: 'otherApp.exe'},
+          {pid: 1, ppid: 2, name: 'otherApp2.exe'},
+        ])
         actions = {
           if: {running: 'app.exe'},
           then: {key: 'space'},
@@ -167,9 +179,9 @@ describe('run', () => {
 
         await run(actions)
 
-        expect(psList).toHaveBeenCalledTimes(1)
-        expect(robot.keyTap).not.toHaveBeenCalled()
-        expect(execFileSync).not.toHaveBeenCalled()
+        expect(psListMock).toHaveBeenCalledTimes(1)
+        expect(keyTapMock).not.toHaveBeenCalled()
+        expect(execFileSyncMock).not.toHaveBeenCalled()
       })
     })
   })
@@ -187,9 +199,9 @@ describe('run', () => {
       }
       await run2(actions)
 
-      expect(robot.mouseClick).not.toHaveBeenCalled()
-      expect(robot.moveMouse).not.toHaveBeenCalled()
-      expect(robot.moveMouseSmooth).not.toHaveBeenCalled()
+      expect(mouseClickMock).not.toHaveBeenCalled()
+      expect(moveMouseMock).not.toHaveBeenCalled()
+      expect(moveMouseSmoothMock).not.toHaveBeenCalled()
     })
 
     it('rejects if mouse action is not supported', async () => {
@@ -207,8 +219,8 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.mouseClick).toHaveBeenCalledTimes(1)
-      expect(robot.mouseClick).toHaveBeenCalledWith('left')
+      expect(mouseClickMock).toHaveBeenCalledTimes(1)
+      expect(mouseClickMock).toHaveBeenCalledWith('left')
     })
 
     it('sets mouse delay if action is "delay"', async () => {
@@ -217,8 +229,8 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.setMouseDelay).toHaveBeenCalledTimes(1)
-      expect(robot.setMouseDelay).toHaveBeenCalledWith(30)
+      expect(setMouseDelayMock).toHaveBeenCalledTimes(1)
+      expect(setMouseDelayMock).toHaveBeenCalledWith(30)
     })
 
     it('moves mouse if action is "move"', async () => {
@@ -227,8 +239,8 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
-      expect(robot.moveMouse).toHaveBeenCalledWith(11, 22)
+      expect(moveMouseMock).toHaveBeenCalledTimes(1)
+      expect(moveMouseMock).toHaveBeenCalledWith(11, 22)
     })
 
     it('moves mouse smoothly if action is "moveSmooth"', async () => {
@@ -237,8 +249,8 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
-      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(11, 22)
+      expect(moveMouseSmoothMock).toHaveBeenCalledTimes(1)
+      expect(moveMouseSmoothMock).toHaveBeenCalledWith(11, 22)
     })
 
     it('is able to run multiple actions', async () => {
@@ -247,12 +259,12 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(robot.mouseClick).toHaveBeenCalledTimes(1)
-      expect(robot.mouseClick).toHaveBeenCalledWith('right')
-      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
-      expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
-      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
-      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(33, 44)
+      expect(mouseClickMock).toHaveBeenCalledTimes(1)
+      expect(mouseClickMock).toHaveBeenCalledWith('right')
+      expect(moveMouseMock).toHaveBeenCalledTimes(1)
+      expect(moveMouseMock).toHaveBeenCalledWith(111, 222)
+      expect(moveMouseSmoothMock).toHaveBeenCalledTimes(1)
+      expect(moveMouseSmoothMock).toHaveBeenCalledWith(33, 44)
     })
   })
 
@@ -261,10 +273,10 @@ describe('run', () => {
       actions = [{exec: ['app']}, {key: 'space'}]
       await run(actions)
 
-      expect(robot.keyTap).toHaveBeenCalledTimes(1)
-      expect(robot.keyTap).toHaveBeenCalledWith('space')
-      expect(execFileSync).toHaveBeenCalledTimes(1)
-      expect(execFileSync).toHaveBeenCalledWith('app', [])
+      expect(keyTapMock).toHaveBeenCalledTimes(1)
+      expect(keyTapMock).toHaveBeenCalledWith('space')
+      expect(execFileSyncMock).toHaveBeenCalledTimes(1)
+      expect(execFileSyncMock).toHaveBeenCalledWith('app', [])
     })
   })
 
@@ -276,9 +288,9 @@ describe('run', () => {
       }
       await run(actions)
 
-      expect(execFileSync).toHaveBeenCalledTimes(1)
-      expect(execFileSync).toHaveBeenCalledWith('app', ['arg1'])
-      expect(robot.keyTap).not.toHaveBeenCalled()
+      expect(execFileSyncMock).toHaveBeenCalledTimes(1)
+      expect(execFileSyncMock).toHaveBeenCalledWith('app', ['arg1'])
+      expect(keyTapMock).not.toHaveBeenCalled()
     })
   })
 })

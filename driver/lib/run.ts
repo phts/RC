@@ -1,8 +1,6 @@
-'use strict'
+import runHandlers from './handlers'
 
-const runHandlers = require('./handlers')
-
-module.exports = async function run(actions) {
+export default async function run(actions) {
   if (!Array.isArray(actions)) {
     actions = [actions]
   }

@@ -1,6 +1,4 @@
-'use strict'
-
-const rawSettings = require('../settings.json')
+import rawSettings from '../settings.json'
 
 if (!rawSettings.serialPort) {
   throw new Error('serialPort is required')
@@ -12,4 +10,4 @@ const DEFAULT_SETTINGS = {
   mappings: {},
 }
 
-module.exports = Object.assign({}, DEFAULT_SETTINGS, rawSettings)
+export default Object.assign({}, DEFAULT_SETTINGS, rawSettings)

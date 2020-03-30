@@ -1,5 +1,3 @@
-'use strict'
-
 const robot = require('optional')('robotjs')
 
 module.exports = async function key(action) {

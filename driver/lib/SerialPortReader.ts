@@ -1,8 +1,6 @@
-'use strict'
+import * as SerialPort from 'serialport'
 
-const SerialPort = require('serialport')
-
-module.exports = class SerialPortReader {
+export default class SerialPortReader {
   constructor(port) {
     const serialPort = new SerialPort(port)
     this.lineStream = serialPort.pipe(new SerialPort.parsers.Readline())

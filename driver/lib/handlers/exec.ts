@@ -1,6 +1,4 @@
-'use strict'
-
-const {execFileSync} = require('child_process')
+import {execFileSync} from 'child_process'
 
 module.exports = function exec(action) {
   const {exec} = action

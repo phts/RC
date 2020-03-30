@@ -1,9 +1,7 @@
-'use strict'
-
-const debounce = require('debounce')
-const settings = require('./lib/settings')
-const run = require('./lib/run')
-const SerialPortReader = require('./lib/SerialPortReader')
+import * as debounce from 'debounce'
+import settings from './lib/settings'
+import run from './lib/run'
+import SerialPortReader from './lib/SerialPortReader'
 
 const simpleHandle = async (button) => {
   const actions = settings.mappings[button]
