@@ -4,7 +4,7 @@ const psList = require('ps-list')
 const robot = require('robotjs')
 const {execFileSync} = require('child_process')
 
-const run = require('./run')
+const run = require('../../lib/run')
 
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('robotjs', () => ({
@@ -181,7 +181,7 @@ describe('run', () => {
         throw new Error('mock error')
       })
 
-      const run2 = require('./run')
+      const run2 = require('../../lib/run')
       actions = {
         mouse: [{moveSmooth: [33, 44]}, {click: 'right'}, {move: [111, 222]}],
       }
