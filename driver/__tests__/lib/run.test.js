@@ -1,8 +1,8 @@
 'use strict'
 
+const {execFileSync} = require('child_process')
 const psList = require('ps-list')
 const robot = require('robotjs')
-const {execFileSync} = require('child_process')
 
 const run = require('../../lib/run')
 

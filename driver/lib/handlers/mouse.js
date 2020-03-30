@@ -3,10 +3,10 @@
 const robot = require('optional')('robotjs')
 
 const MOUSE_FNS = {
-  click: button => robot.mouseClick(button),
-  delay: delay => robot.setMouseDelay(delay),
-  move: coords => robot.moveMouse(coords[0], coords[1]),
-  moveSmooth: coords => robot.moveMouseSmooth(coords[0], coords[1]),
+  click: (button) => robot.mouseClick(button),
+  delay: (delay) => robot.setMouseDelay(delay),
+  move: (coords) => robot.moveMouse(coords[0], coords[1]),
+  moveSmooth: (coords) => robot.moveMouseSmooth(coords[0], coords[1]),
 }
 
 function runMouseAction(mouseAction) {

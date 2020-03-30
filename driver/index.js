@@ -5,7 +5,7 @@ const settings = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
 
-const simpleHandle = async button => {
+const simpleHandle = async (button) => {
   const actions = settings.mappings[button]
   if (!actions) {
     console.warn(`Action not found for remote control button "${button}"`)
@@ -22,7 +22,7 @@ const simpleHandle = async button => {
 
 const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 
-const callHandleFn = button => {
+const callHandleFn = (button) => {
   return (settings.noDebounce.includes(button) ? simpleHandle : debouncedHandle)(button)
 }
 

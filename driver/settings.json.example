@@ -4,16 +4,16 @@
   "noDebounce": ["volume_up", "volume_down"],
   "mappings": {
     "play": {
-      "if": { "running": "app.exe" },
-      "then": { "key": "space" },
-      "else": { "exec": ["app2.exe", "/play"] }
+      "if": {"running": "app.exe"},
+      "then": {"key": "space"},
+      "else": {"exec": ["app2.exe", "/play"]}
     },
-    "stop": { "key": "space" },
-    "open": { "exec": "app3.exe" },
-    "close": { "exec": ["app4.exe", "--with", "--args"] },
-    "fun1": [{ "exec": "app5.exe" }, { "key": "space" }],
+    "stop": {"key": "space"},
+    "open": {"exec": "app3.exe"},
+    "close": {"exec": ["app4.exe", "--with", "--args"]},
+    "fun1": [{"exec": "app5.exe"}, {"key": "space"}],
     "fun2": {
-      "mouse": [{ "moveSmooth": [1600, 600] }, { "click": "left" }]
+      "mouse": [{"moveSmooth": [1600, 600]}, {"click": "left"}]
     }
   }
 }

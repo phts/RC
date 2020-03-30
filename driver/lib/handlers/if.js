@@ -3,7 +3,7 @@
 const psList = require('ps-list')
 
 const OPERATOR_FNS = {
-  running: async operand => !!(await psList()).find(x => x.name === operand),
+  running: async (operand) => !!(await psList()).find((x) => x.name === operand),
 }
 
 module.exports = async function handleIf(action) {
