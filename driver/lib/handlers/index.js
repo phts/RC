@@ -1,6 +1,6 @@
 'use strict'
 
-const handlers = require('require-directory')(module)
+const handlers = require('require-directory')(module, {recurse: false})
 
 async function runHandlers(action) {
   for (const k in handlers) {

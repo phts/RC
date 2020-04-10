@@ -14,6 +14,20 @@
     "fun1": [{"exec": "app5.exe"}, {"key": "space"}],
     "fun2": {
       "mouse": [{"moveSmooth": [1600, 600]}, {"click": "left"}]
+    },
+    "eject": {"state": ["state1", "state2"]},
+    "fun3": {
+      "if": {"state": "state1"},
+      "then": [
+        {
+          "exec": "app4.exe"
+        }
+      ],
+      "else": [
+        {
+          "exec": "app5.exe"
+        }
+      ]
     }
   }
 }

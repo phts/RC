@@ -71,13 +71,25 @@ Key mapping configuration is contained in `settings.json`. For example:
 
 ### Supported actions
 
-- Condition
+- Condition `if`
 
-  - `running` - check if running application (using [ps-list](https://www.npmjs.com/package/ps-list))
+  Operators:
+
+  - `running` &mdash; check if running application (using [ps-list](https://www.npmjs.com/package/ps-list))
 
     ```json
     {
       "if": {"running": "mpc-hc.exe"},
+      "then": ["list of actions described below"],
+      "else": ["list of actions described below"]
+    }
+    ```
+
+  - `state` &mdash; check current state controlled by action `state` (see below)
+
+    ```json
+    {
+      "if": {"state": "turned off"},
       "then": ["list of actions described below"],
       "else": ["list of actions described below"]
     }
@@ -125,3 +137,13 @@ Key mapping configuration is contained in `settings.json`. For example:
     ```json
     {"moveSmooth": [1750, 100]}
     ```
+
+- Switch state
+
+  ```json
+  {"state": ["music", "video", "browser", "etc"]}
+  ```
+
+  Every time when this action is executed a global state will be updated with the next value listed in the array.
+
+  This state can be retrieved by `if` to do different things depending on the current value.

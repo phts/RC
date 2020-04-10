@@ -4,6 +4,7 @@ const {execFileSync} = require('child_process')
 const psList = require('ps-list')
 const robot = require('robotjs')
 
+const storage = require('../../lib/storage')
 const run = require('../../lib/run')
 
 jest.mock('ps-list', () => jest.fn(async () => {}))
@@ -124,8 +125,8 @@ describe('run', () => {
       )
     })
 
-    describe('when operator if "running"', () => {
-      it('runs "then" actions if the condition is true', async () => {
+    describe('when operator "running"', () => {
+      it('runs "then" actions if the specified application is running', async () => {
         psList.mockResolvedValue([
           {name: 'otherApp.exe'},
           {name: 'app.exe'},
@@ -143,7 +144,7 @@ describe('run', () => {
         expect(robot.keyTap).toHaveBeenCalledWith('space')
       })
 
-      it('runs "else" actions if the condition is false', async () => {
+      it('runs "else" actions if specified application is not running', async () => {
         psList.mockResolvedValue([{name: 'otherApp.exe'}, {name: 'otherApp2.exe'}])
         actions = {
           if: {running: 'app.exe'},
@@ -170,6 +171,56 @@ describe('run', () => {
         expect(psList).toHaveBeenCalledTimes(1)
         expect(robot.keyTap).not.toHaveBeenCalled()
         expect(execFileSync).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when operator "state"', () => {
+      const currentState = 'state42'
+      let getCurrentValueMock
+
+      beforeAll(() => {
+        getCurrentValueMock = jest.spyOn(storage, 'getCurrentValue').mockReturnValue(currentState)
+      })
+
+      afterAll(() => {
+        getCurrentValueMock.mockRestore()
+      })
+
+      it('runs "then" actions if the specified state is current', async () => {
+        actions = {
+          if: {state: currentState},
+          then: {key: 'space'},
+          else: {key: 'esc'},
+        }
+
+        await run(actions)
+
+        expect(robot.keyTap).toHaveBeenCalledTimes(1)
+        expect(robot.keyTap).toHaveBeenCalledWith('space')
+      })
+
+      it('runs "else" actions if the specified state is not current', async () => {
+        actions = {
+          if: {state: 'notCurrent'},
+          then: {key: 'space'},
+          else: {key: 'esc'},
+        }
+
+        await run(actions)
+
+        expect(robot.keyTap).toHaveBeenCalledTimes(1)
+        expect(robot.keyTap).toHaveBeenCalledWith('esc')
+      })
+
+      it('does not run anything if the condition is false and no "else" statement', async () => {
+        actions = {
+          if: {state: 'notCurrent'},
+          then: {key: 'space'},
+        }
+
+        await run(actions)
+
+        expect(robot.keyTap).not.toHaveBeenCalled()
       })
     })
   })
@@ -253,6 +304,26 @@ describe('run', () => {
       expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
       expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
       expect(robot.moveMouseSmooth).toHaveBeenCalledWith(33, 44)
+    })
+  })
+
+  describe('when "state" action', () => {
+    it('sets next value in the storage on each execution', async () => {
+      actions = {
+        state: ['state1', 'state2', 'state3'],
+      }
+
+      await run(actions)
+      expect(storage.getCurrentValue()).toEqual('state1')
+
+      await run(actions)
+      expect(storage.getCurrentValue()).toEqual('state2')
+
+      await run(actions)
+      expect(storage.getCurrentValue()).toEqual('state3')
+
+      await run(actions)
+      expect(storage.getCurrentValue()).toEqual('state1')
     })
   })
 
