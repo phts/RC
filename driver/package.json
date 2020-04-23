@@ -22,7 +22,7 @@
     "optional": "^0.1.4",
     "ps-list": "^6.3.0",
     "require-directory": "^2.1.1",
-    "serialport": "^7.1.5"
+    "serialport": "^8.0.7"
   },
   "optionalDependencies": {
     "robotjs": "^0.5.1"
