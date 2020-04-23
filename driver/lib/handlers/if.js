@@ -2,7 +2,7 @@
 
 const operators = require('require-directory')(module, './if-operators')
 
-module.exports = async function handleIf(action) {
+module.exports = async function handleIf(action, ...otherArgs) {
   if (!action.if) {
     return false
   }
@@ -19,9 +19,9 @@ module.exports = async function handleIf(action) {
     const result = await fn(operand)
     const run = require('../run')
     if (result) {
-      return run(action.then)
+      return run(action.then, ...otherArgs)
     } else if (action.else) {
-      return run(action.else)
+      return run(action.else, ...otherArgs)
     }
 
     return true

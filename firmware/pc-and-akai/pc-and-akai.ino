@@ -1,11 +1,13 @@
 #include <IRremote.h>
 #include "yamaha-ras13.h"
 #include "pins.h"
+#include "leds.h"
 
 IRrecv irrecv(PIN_IR);
 decode_results results;
 bool is_pc_disabled = false;
 String last_btn = BUTTON_UNKNOWN;
+int last_leds = 0b0;
 
 void send_btn(const String btn)
 {
@@ -46,10 +48,7 @@ void handle_btn(const String btn)
     }
     else
     {
-      digitalWrite(PIN_RED, LOW);
-      digitalWrite(PIN_YELLOW, LOW);
-      digitalWrite(PIN_GREEN, LOW);
-      digitalWrite(PIN_BLUE, LOW);
+      handle_leds(last_leds);
       last_btn = BUTTON_UNKNOWN;
     }
     return;
@@ -100,6 +99,19 @@ void handle_btn(const String btn)
   }
 }
 
+void handle_leds(int data)
+{
+  if (data == 0xA || data == -1)
+  {
+    return;
+  }
+  digitalWrite(PIN_RED, data & LED_RED ? HIGH : LOW);
+  digitalWrite(PIN_YELLOW, data & LED_YELLOW ? HIGH : LOW);
+  digitalWrite(PIN_GREEN, data & LED_GREEN ? HIGH : LOW);
+  digitalWrite(PIN_BLUE, data & LED_BLUE ? HIGH : LOW);
+  last_leds = data;
+}
+
 void setup()
 {
   setup_pins();
@@ -114,5 +126,10 @@ void loop()
     String btn = get_button_name(results.value);
     handle_btn(btn);
     irrecv.resume();
+  }
+  if (Serial.available() > 0)
+  {
+    int data = Serial.read();
+    handle_leds(data);
   }
 }

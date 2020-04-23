@@ -19,8 +19,13 @@ jest.mock('child_process', () => ({
   execFileSync: jest.fn(),
 }))
 
+function toBinaryStr(number) {
+  return `0b${number.toString(2).padStart(4, '0')}`
+}
+
 describe('run', () => {
   let actions
+  let writeToSerial
 
   beforeEach(() => {
     execFileSync.mockClear()
@@ -30,6 +35,7 @@ describe('run', () => {
     robot.moveMouse.mockClear()
     robot.moveMouseSmooth.mockClear()
     robot.setMouseDelay.mockClear()
+    writeToSerial = jest.fn()
   })
 
   describe('when "exec" action', () => {
@@ -324,6 +330,98 @@ describe('run', () => {
 
       await run(actions)
       expect(storage.getCurrentValue()).toEqual('state1')
+    })
+  })
+
+  describe('when "led" action', () => {
+    const EXPECTED = {
+      red: 0b0001,
+      yellow: 0b0010,
+      green: 0b0100,
+      blue: 0b1000,
+    }
+
+    it('rejects if "led" has wrong type', async () => {
+      actions = {
+        led: {wrong: 'type'},
+      }
+
+      await expect(run(actions)).rejects.toThrow('"led" must be a string or an array')
+    })
+
+    it('rejects if "led" has wrong value', async () => {
+      actions = {
+        led: 'wrong',
+      }
+
+      await expect(run(actions)).rejects.toThrow(
+        'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue.'
+      )
+    })
+
+    describe('when value is a string', () => {
+      Object.entries(EXPECTED).forEach(([color, expected]) => {
+        it(`writes ${expected} (${toBinaryStr(
+          expected
+        )}) into serial port if led="${color}"`, async () => {
+          actions = {
+            led: color,
+          }
+          await run(actions, writeToSerial)
+
+          expect(writeToSerial).toHaveBeenCalledTimes(1)
+          expect(writeToSerial).toHaveBeenCalledWith(expected)
+        })
+      })
+    })
+
+    describe('when value is an empty array', () => {
+      it(`writes 0 into serial port to turn off all LEDs`, async () => {
+        writeToSerial.mockClear()
+        actions = {
+          led: [],
+        }
+        await run(actions, writeToSerial)
+        expect(writeToSerial).toHaveBeenCalledTimes(1)
+        expect(writeToSerial).toHaveBeenCalledWith(0)
+      })
+    })
+
+    describe('when value is a non-empty array', () => {
+      it('writes bitwise OR of all array items into serial port', async () => {
+        for (const r of [[], ['red']]) {
+          for (const y of [[], ['yellow']]) {
+            for (const g of [[], ['green']]) {
+              for (const b of [[], ['blue']]) {
+                writeToSerial.mockClear()
+                const led = [...r, ...y, ...g, ...b]
+                if (led.length === 0) {
+                  return
+                }
+                actions = {
+                  led,
+                }
+                await run(actions, writeToSerial)
+                const expected = led.reduce((acc, l) => {
+                  return acc | EXPECTED[l]
+                }, 0)
+
+                expect(writeToSerial).toHaveBeenCalledTimes(1)
+                expect(writeToSerial).toHaveBeenCalledWith(expected)
+              }
+            }
+          }
+        }
+      })
+
+      it('rejects if array contains wrong values', async () => {
+        actions = {
+          led: ['red', 'wrong', 'yellow'],
+        }
+        await expect(run(actions)).rejects.toThrow(
+          'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue'
+        )
+      })
     })
   })
 

@@ -147,3 +147,11 @@ Key mapping configuration is contained in `settings.json`. For example:
   Every time when this action is executed a global state will be updated with the next value listed in the array.
 
   This state can be retrieved by `if` to do different things depending on the current value.
+
+- Switch on/off LEDs on the device
+
+  ```json
+  {"led": "red"},           // as string - "red" | "yellow"  | "green" | "blue"
+  {"led": ["red", "blue"]}, // as array
+  {"led": []},              // empty array - to switch off all LEDs
+  ```
