@@ -4,6 +4,7 @@ const debounce = require('debounce')
 const settings = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
+const storage = require('./lib/storage')
 
 const simpleHandle = async (button, writeToSerial) => {
   const actions = settings.mappings[button]
@@ -25,6 +26,11 @@ const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 const callHandleFn = (button, writeToSerial) => {
   const fn = settings.noDebounce.includes(button) ? simpleHandle : debouncedHandle
   return fn(button, writeToSerial)
+}
+
+if (settings.initialState) {
+  storage.setValues([settings.initialState])
+  storage.toggleNextValue()
 }
 
 const reader = new SerialPortReader(settings.serialPort)

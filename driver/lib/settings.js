@@ -8,8 +8,9 @@ if (!rawSettings.serialPort) {
 
 const DEFAULT_SETTINGS = {
   debounceDelay: 150,
-  noDebounce: [],
+  initialState: null,
   mappings: {},
+  noDebounce: [],
 }
 
 module.exports = Object.assign({}, DEFAULT_SETTINGS, rawSettings)
