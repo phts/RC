@@ -1,5 +1,5 @@
 #include <IRremote.h>
-#include "lib/yamaha-ras13.h"
+#include "yamaha-ras13.h"
 
 const int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
