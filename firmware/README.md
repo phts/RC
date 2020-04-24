@@ -1,10 +1,23 @@
 # arduino-pc-remote-control: firmware
 
-![Circuit](./doc/pc-only-circuit.png)
+## Requirements
 
-Requires [IRremote Arduino Library](http://z3t0.github.io/Arduino-IRremote/).
+- [IRremote Arduino Library](http://z3t0.github.io/Arduino-IRremote/)
+
+## [PC-only](./pc-only/pc-only.ino)
+
+<image width=500 src="./doc/pc-only-circuit.png">
 
 Inspired by *[How to Set Up an IR Remote and Receiver on an Arduino](http://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/)*.
+
+## [PC + Akai GX-F37 cassette deck](./pc-and-akai/pc-and-akai.ino)
+
+<image width=500 src="./doc/pc-and-akai-circuit.jpg">
+
+<image width=500 src="./doc/pc-and-akai-proto.jpg">
+
+- "CD power" button to switch control between PC and Akai
+- When Akai control is active then all LEDs are turned on and PC does not receive any signals
 
 ## Development
 
