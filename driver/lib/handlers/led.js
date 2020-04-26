@@ -1,5 +1,6 @@
 'use strict'
 
+const LED_OVERHEAD = 0b10000
 const LED_RED = 0b0001
 const LED_YELLOW = 0b0010
 const LED_GREEN = 0b0100
@@ -44,7 +45,7 @@ module.exports = async function led(action, writeToSerial) {
   }
 
   const leds = covertColorsToLeds(colors)
-  writeToSerial(leds)
+  writeToSerial(leds + LED_OVERHEAD)
 
   return true
 }

@@ -334,11 +334,12 @@ describe('run', () => {
   })
 
   describe('when "led" action', () => {
+    const EXPECTED_OVERHEAD = 0b10000
     const EXPECTED = {
-      red: 0b0001,
-      yellow: 0b0010,
-      green: 0b0100,
-      blue: 0b1000,
+      red: EXPECTED_OVERHEAD ^ 0b0001,
+      yellow: EXPECTED_OVERHEAD ^ 0b0010,
+      green: EXPECTED_OVERHEAD ^ 0b0100,
+      blue: EXPECTED_OVERHEAD ^ 0b1000,
     }
 
     it('rejects if "led" has wrong type', async () => {
@@ -376,14 +377,16 @@ describe('run', () => {
     })
 
     describe('when value is an empty array', () => {
-      it(`writes 0 into serial port to turn off all LEDs`, async () => {
+      it(`writes ${EXPECTED_OVERHEAD} (${toBinaryStr(
+        EXPECTED_OVERHEAD
+      )}) into serial port to turn off all LEDs`, async () => {
         writeToSerial.mockClear()
         actions = {
           led: [],
         }
         await run(actions, writeToSerial)
         expect(writeToSerial).toHaveBeenCalledTimes(1)
-        expect(writeToSerial).toHaveBeenCalledWith(0)
+        expect(writeToSerial).toHaveBeenCalledWith(EXPECTED_OVERHEAD)
       })
     })
 
@@ -404,7 +407,7 @@ describe('run', () => {
                 await run(actions, writeToSerial)
                 const expected = led.reduce((acc, l) => {
                   return acc | EXPECTED[l]
-                }, 0)
+                }, EXPECTED_OVERHEAD)
 
                 expect(writeToSerial).toHaveBeenCalledTimes(1)
                 expect(writeToSerial).toHaveBeenCalledWith(expected)

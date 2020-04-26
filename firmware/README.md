@@ -24,9 +24,9 @@ Inspired by *[How to Set Up an IR Remote and Receiver on an Arduino](http://www.
 
 ### LEDs
 
-In order to light LEDs on the device, driver should send back an integer via serial port to Arduino. 1<sup>st</sup> bit of this number corresponds to red, 2<sup>nd</sup> &mdash; yellow, 3<sup>rd</sup> &mdash; green, 4<sup>th</sup> &mdash; blue.
+In order to light LEDs on the device, driver should send back an integer via serial port to Arduino. 1<sup>st</sup> bit of this number corresponds to red, 2<sup>nd</sup> &mdash; yellow, 3<sup>rd</sup> &mdash; green, 4<sup>th</sup> &mdash; blue. 5<sup>th</sup> bit is always `1`.
 
-For example, send `0b0101` to light red and green LEDs simultaneously.
+For example, send `0b10011` (=19) to light red and yellow LEDs simultaneously.
 
 ## Development
 

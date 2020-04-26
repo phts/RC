@@ -105,10 +105,11 @@ void handle_leds(int data)
   {
     return;
   }
-  digitalWrite(PIN_RED, data & LED_RED ? HIGH : LOW);
-  digitalWrite(PIN_YELLOW, data & LED_YELLOW ? HIGH : LOW);
-  digitalWrite(PIN_GREEN, data & LED_GREEN ? HIGH : LOW);
-  digitalWrite(PIN_BLUE, data & LED_BLUE ? HIGH : LOW);
+  int leds = data ^ LED_OVERHEAD;
+  digitalWrite(PIN_RED, leds & LED_RED ? HIGH : LOW);
+  digitalWrite(PIN_YELLOW, leds & LED_YELLOW ? HIGH : LOW);
+  digitalWrite(PIN_GREEN, leds & LED_GREEN ? HIGH : LOW);
+  digitalWrite(PIN_BLUE, leds & LED_BLUE ? HIGH : LOW);
   last_leds = data;
 }
 
