@@ -1,13 +1,15 @@
 'use strict'
 
 const debounce = require('debounce')
-const settings = require('./lib/settings')
+const {getInitialSettings, getMappings} = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
 const storage = require('./lib/storage')
 
+const settings = getInitialSettings()
+
 const simpleHandle = async (button, writeToSerial) => {
-  const actions = settings.mappings[button]
+  const actions = getMappings()[button]
   if (!actions) {
     console.warn(`Action not found for remote control button "${button}"`)
     return

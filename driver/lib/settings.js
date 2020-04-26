@@ -2,12 +2,12 @@
 
 const SETTINGS_PATH = require('path').resolve(__dirname, '../settings.json')
 
-const rawSettings = require('cjson').load(SETTINGS_PATH)
+const initialSettings = require('cjson').load(SETTINGS_PATH)
 
-if (!rawSettings.serialPort) {
+if (!initialSettings.serialPort) {
   throw new Error('serialPort is required')
 }
-if (!rawSettings.mappings) {
+if (!initialSettings.mappings) {
   throw new Error('mappings is required')
 }
 
@@ -17,4 +17,11 @@ const DEFAULT_SETTINGS = {
   noDebounce: [],
 }
 
-module.exports = Object.assign({}, DEFAULT_SETTINGS, rawSettings)
+module.exports = {
+  getInitialSettings() {
+    return Object.assign({}, DEFAULT_SETTINGS, initialSettings)
+  },
+  getMappings() {
+    return require('cjson').load(SETTINGS_PATH).mappings
+  },
+}
