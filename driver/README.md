@@ -150,6 +150,12 @@ and the value is an action or a list of actions.
     {"delay": 30}
     ```
 
+  - `doubleClick`
+
+    ```json
+    {"delay": "left | right | middle"}
+    ```
+
   - `move`
 
     ```json
@@ -160,6 +166,24 @@ and the value is an action or a list of actions.
 
     ```json
     {"moveSmooth": [1750, 100]}
+    ```
+
+  - `moveRelative`
+
+    ```json
+    {"moveRelative": [100, 200]}
+    ```
+
+  - `moveRelativeSmooth`
+
+    ```json
+    {"moveRelativeSmooth": [100, 200]}
+    ```
+
+  - `scroll`
+
+    ```json
+    {"scroll": 42}
     ```
 
 - Switch state

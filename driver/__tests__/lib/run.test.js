@@ -9,10 +9,12 @@ const run = require('../../lib/run')
 
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('robotjs', () => ({
+  getMousePos: jest.fn(),
   keyTap: jest.fn(),
   mouseClick: jest.fn(),
   moveMouse: jest.fn(),
   moveMouseSmooth: jest.fn(),
+  scrollMouse: jest.fn(),
   setMouseDelay: jest.fn(),
 }))
 jest.mock('child_process', () => ({
@@ -30,10 +32,12 @@ describe('run', () => {
   beforeEach(() => {
     execFileSync.mockClear()
     psList.mockReset()
+    robot.getMousePos.mockClear()
     robot.keyTap.mockClear()
     robot.mouseClick.mockClear()
     robot.moveMouse.mockClear()
     robot.moveMouseSmooth.mockClear()
+    robot.scrollMouse.mockClear()
     robot.setMouseDelay.mockClear()
     writeToSerial = jest.fn()
   })
@@ -254,7 +258,7 @@ describe('run', () => {
         mouse: {unsupported: true},
       }
       await expect(run(actions)).rejects.toThrow(
-        '"mouse" must contain any of supported actions: click, delay, move, moveSmooth'
+        '"mouse" must contain any of supported actions: click, delay, doubleClick, move, moveSmooth, moveRelative, moveRelativeSmooth, scroll'
       )
     })
 
@@ -278,6 +282,16 @@ describe('run', () => {
       expect(robot.setMouseDelay).toHaveBeenCalledWith(30)
     })
 
+    it('emulates mouse double click if action is "doubleClick"', async () => {
+      actions = {
+        mouse: {doubleClick: 'right'},
+      }
+      await run(actions)
+
+      expect(robot.mouseClick).toHaveBeenCalledTimes(1)
+      expect(robot.mouseClick).toHaveBeenCalledWith('right', true)
+    })
+
     it('moves mouse if action is "move"', async () => {
       actions = {
         mouse: {move: [11, 22]},
@@ -296,6 +310,38 @@ describe('run', () => {
 
       expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
       expect(robot.moveMouseSmooth).toHaveBeenCalledWith(11, 22)
+    })
+
+    it('moves mouse relative to current position if action is "moveRelative"', async () => {
+      jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
+      actions = {
+        mouse: {moveRelative: [11, 22]},
+      }
+      await run(actions)
+
+      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
+    })
+
+    it('moves mouse smoothly relative to current position if action is "moveRelativeSmooth"', async () => {
+      jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
+      actions = {
+        mouse: {moveRelativeSmooth: [11, 22]},
+      }
+      await run(actions)
+
+      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(111, 222)
+    })
+
+    it('emulates mouse scroll if action is "scroll"', async () => {
+      actions = {
+        mouse: {scroll: 100},
+      }
+      await run(actions)
+
+      expect(robot.scrollMouse).toHaveBeenCalledTimes(1)
+      expect(robot.scrollMouse).toHaveBeenCalledWith(0, 100)
     })
 
     it('is able to run multiple actions', async () => {

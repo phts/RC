@@ -5,8 +5,18 @@ const robot = require('optional')('robotjs')
 const MOUSE_FNS = {
   click: (button) => robot.mouseClick(button),
   delay: (delay) => robot.setMouseDelay(delay),
+  doubleClick: (button) => robot.mouseClick(button, true),
   move: (coords) => robot.moveMouse(coords[0], coords[1]),
   moveSmooth: (coords) => robot.moveMouseSmooth(coords[0], coords[1]),
+  moveRelative: (coords) => {
+    const pos = robot.getMousePos()
+    robot.moveMouse(pos.x + coords[0], pos.y + coords[1])
+  },
+  moveRelativeSmooth: (coords) => {
+    const pos = robot.getMousePos()
+    robot.moveMouseSmooth(pos.x + coords[0], pos.y + coords[1])
+  },
+  scroll: (distance) => robot.scrollMouse(0, distance),
 }
 
 function runMouseAction(mouseAction) {
