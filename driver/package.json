@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/phts/remote-control#readme",
   "dependencies": {
+    "cjson": "^0.5.0",
     "debounce": "^1.2.0",
     "optional": "^0.1.4",
     "ps-list": "^6.3.0",

@@ -1,6 +1,8 @@
 'use strict'
 
-const rawSettings = require('../settings.json')
+const SETTINGS_PATH = require('path').resolve(__dirname, '../settings.json')
+
+const rawSettings = require('cjson').load(SETTINGS_PATH)
 
 if (!rawSettings.serialPort) {
   throw new Error('serialPort is required')
