@@ -1,17 +1,17 @@
 # arduino-pc-remote-control: driver
 
-This is Node.js application which reads data from serial port written by [arduino](https://github.com/phts/remote-control/tree/master/firmware)
+This is Node.js application which reads data from serial port written by [arduino]
 and performs actions mapped for the particular button on a remote control.
 
 ## Install
 
-To support keyboard and mouse actions by [robotjs](https://www.npmjs.com/package/robotjs)
+To support keyboard and mouse actions by [robotjs]
 you have to install build tools first. However it is not required for the whole
 application &mdash; if you don't use keyboard/mouse actions then this step is not needed as well.
 
 - Windows
 
-  - [windows-build-tools](https://www.npmjs.com/package/windows-build-tools).
+  - [windows-build-tools].
     Run in PowerShell or CMD.exe:
 
     ```bash
@@ -47,10 +47,13 @@ $ npm start
 
 ## Configuration
 
-Key mapping configuration is contained in `settings.json`. For example:
+Key mapping configuration is contained in [`settings.json`]. For example:
 
 ```json
 {
+  "serialPort": "COM# or /dev/tty-xxx",
+  "debounceDelay": 150,
+  "noDebounce": ["volume_up", "volume_down"],
   "mappings": {
     "play": {
       "if": {"running": "mpc-hc.exe"},
@@ -69,13 +72,35 @@ Key mapping configuration is contained in `settings.json`. For example:
 }
 ```
 
-### Supported actions
+### Serial port
+
+Required. To be able to connect to your Arduino.
+
+### Debounce
+
+While pressing a button on the remote control IR it sends a lot of repeating signals.
+Each of those signals are treated as separate button presses by the driver.
+In this case a single action would be run multiple times on a single actual button press.
+
+To avoid such behavior there is `debounceDelay` value. By default &mdash; 150 (ms).
+This ensures to run your action only once on one button press.
+
+However this behavior is not acceptable in all cases. For example for volume control it
+is useful opposite behavior to have possibility to change volume while button is pressed.
+This is controlled by `noDebounce` value.
+
+### Mappings
+
+Each mapping is a key-value value where the key is [a button on the remote control]
+and the value is an action or a list of actions.
+
+#### Supported actions
 
 - Condition `if`
 
   Operators:
 
-  - `running` &mdash; check if running application (using [ps-list](https://www.npmjs.com/package/ps-list))
+  - `running` &mdash; check if running application (using [ps-list])
 
     ```json
     {
@@ -95,8 +120,7 @@ Key mapping configuration is contained in `settings.json`. For example:
     }
     ```
 
-- Emulate key press. Key codes could be retrieved from
-  [robotjs](http://robotjs.io/docs/syntax#keys)
+- Emulate key press. Key codes could be retrieved from [robotjs syntax]
 
   ```json
   {"key": "space"}
@@ -155,3 +179,11 @@ Key mapping configuration is contained in `settings.json`. For example:
   {"led": ["red", "blue"]}, // as array
   {"led": []},              // empty array - to switch off all LEDs
   ```
+
+[arduino]: https://github.com/phts/remote-control/tree/master/firmware
+[robotjs]: https://www.npmjs.com/package/robotjs
+[windows-build-tools]: https://www.npmjs.com/package/windows-build-tools
+[`settings.json`]: ./settings.json.example
+[ps-list]: https://www.npmjs.com/package/ps-list
+[robotjs syntax]: http://robotjs.io/docs/syntax#keys
+[a button on the remote control]: ../firmware/libraries/yamaha-ras13/yamaha-ras13.h
