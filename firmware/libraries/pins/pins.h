@@ -6,10 +6,10 @@ const int PIN_PAUSE = 6;
 const int PIN_REC = 7;
 const int PIN_MUTE = 8;
 const int PIN_IR = 9;
-const int PIN_RED = 10;
-const int PIN_YELLOW = 11;
-const int PIN_GREEN = 12;
-const int PIN_BLUE = 13;
+const int PIN_RED = A1;
+const int PIN_YELLOW = A2;
+const int PIN_GREEN = A3;
+const int PIN_BLUE = A4;
 
 void setup_pins()
 {
