@@ -12,6 +12,7 @@ const int PIN_RED = A1;
 const int PIN_YELLOW = A2;
 const int PIN_GREEN = A3;
 const int PIN_BLUE = A4;
+const int PIN_WHITE = A5;
 
 void setup_pins()
 {
@@ -29,4 +30,5 @@ void setup_pins()
   pinMode(PIN_YELLOW, OUTPUT);
   pinMode(PIN_GREEN, OUTPUT);
   pinMode(PIN_BLUE, OUTPUT);
+  pinMode(PIN_WHITE, OUTPUT);
 }

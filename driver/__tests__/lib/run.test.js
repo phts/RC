@@ -380,12 +380,13 @@ describe('run', () => {
   })
 
   describe('when "led" action', () => {
-    const EXPECTED_OVERHEAD = 0b10000
+    const EXPECTED_OVERHEAD = 0b100000
     const EXPECTED = {
-      red: EXPECTED_OVERHEAD ^ 0b0001,
-      yellow: EXPECTED_OVERHEAD ^ 0b0010,
-      green: EXPECTED_OVERHEAD ^ 0b0100,
-      blue: EXPECTED_OVERHEAD ^ 0b1000,
+      red: EXPECTED_OVERHEAD ^ 0b00001,
+      yellow: EXPECTED_OVERHEAD ^ 0b00010,
+      green: EXPECTED_OVERHEAD ^ 0b00100,
+      blue: EXPECTED_OVERHEAD ^ 0b01000,
+      white: EXPECTED_OVERHEAD ^ 0b10000,
     }
 
     it('rejects if "led" has wrong type', async () => {
@@ -402,7 +403,7 @@ describe('run', () => {
       }
 
       await expect(run(actions)).rejects.toThrow(
-        'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue.'
+        'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue, white.'
       )
     })
 
@@ -442,21 +443,23 @@ describe('run', () => {
           for (const y of [[], ['yellow']]) {
             for (const g of [[], ['green']]) {
               for (const b of [[], ['blue']]) {
-                writeToSerial.mockClear()
-                const led = [...r, ...y, ...g, ...b]
-                if (led.length === 0) {
-                  return
-                }
-                actions = {
-                  led,
-                }
-                await run(actions, writeToSerial)
-                const expected = led.reduce((acc, l) => {
-                  return acc | EXPECTED[l]
-                }, EXPECTED_OVERHEAD)
+                for (const w of [[], ['white']]) {
+                  writeToSerial.mockClear()
+                  const led = [...r, ...y, ...g, ...b, ...w]
+                  if (led.length === 0) {
+                    return
+                  }
+                  actions = {
+                    led,
+                  }
+                  await run(actions, writeToSerial)
+                  const expected = led.reduce((acc, l) => {
+                    return acc | EXPECTED[l]
+                  }, EXPECTED_OVERHEAD)
 
-                expect(writeToSerial).toHaveBeenCalledTimes(1)
-                expect(writeToSerial).toHaveBeenCalledWith(expected)
+                  expect(writeToSerial).toHaveBeenCalledTimes(1)
+                  expect(writeToSerial).toHaveBeenCalledWith(expected)
+                }
               }
             }
           }
@@ -468,7 +471,7 @@ describe('run', () => {
           led: ['red', 'wrong', 'yellow'],
         }
         await expect(run(actions)).rejects.toThrow(
-          'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue'
+          'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue, white.'
         )
       })
     })

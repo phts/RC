@@ -47,6 +47,7 @@ void handle_btn(const String btn)
       digitalWrite(PIN_YELLOW, LOW);
       digitalWrite(PIN_GREEN, LOW);
       digitalWrite(PIN_BLUE, LOW);
+      digitalWrite(PIN_WHITE, LOW);
     }
     else
     {
@@ -114,6 +115,7 @@ void handle_leds(int data)
   digitalWrite(PIN_YELLOW, leds & LED_YELLOW ? HIGH : LOW);
   digitalWrite(PIN_GREEN, leds & LED_GREEN ? HIGH : LOW);
   digitalWrite(PIN_BLUE, leds & LED_BLUE ? HIGH : LOW);
+  digitalWrite(PIN_WHITE, leds & LED_WHITE ? HIGH : LOW);
   last_leds = data;
 }
 
