@@ -41,13 +41,15 @@ void handle_btn(const String btn)
     is_pc_disabled = !is_pc_disabled;
     if (is_pc_disabled)
     {
-      digitalWrite(PIN_RED, HIGH);
-      digitalWrite(PIN_YELLOW, HIGH);
-      digitalWrite(PIN_GREEN, HIGH);
-      digitalWrite(PIN_BLUE, HIGH);
+      digitalWrite(PIN_AKAI, HIGH);
+      digitalWrite(PIN_RED, LOW);
+      digitalWrite(PIN_YELLOW, LOW);
+      digitalWrite(PIN_GREEN, LOW);
+      digitalWrite(PIN_BLUE, LOW);
     }
     else
     {
+      digitalWrite(PIN_AKAI, LOW);
       handle_leds(last_leds);
       last_btn = BUTTON_UNKNOWN;
     }

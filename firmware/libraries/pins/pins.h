@@ -6,6 +6,7 @@ const int PIN_PAUSE = 6;
 const int PIN_REC = 7;
 const int PIN_MUTE = 8;
 const int PIN_IR = 9;
+const int PIN_AKAI = A0;
 const int PIN_RED = A1;
 const int PIN_YELLOW = A2;
 const int PIN_GREEN = A3;
@@ -21,6 +22,7 @@ void setup_pins()
   pinMode(PIN_REC, OUTPUT);
   pinMode(PIN_MUTE, OUTPUT);
   pinMode(PIN_IR, OUTPUT);
+  pinMode(PIN_AKAI, OUTPUT);
   pinMode(PIN_RED, OUTPUT);
   pinMode(PIN_YELLOW, OUTPUT);
   pinMode(PIN_GREEN, OUTPUT);

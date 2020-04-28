@@ -6,7 +6,7 @@
 
 - "CD power" button to switch control between PC and Akai
 - Supports receiving signals via serial port from driver to light LEDs (red, yellow, green, blue)
-- When Akai control is active then all LEDs are turned on and PC does not receive any signals
+- When Akai control is active then big white LED is turned on and PC does not receive any signals
 
 ## LEDs
 
