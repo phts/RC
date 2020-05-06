@@ -1,4 +1,5 @@
 #include <IRremote.h>
+#include "constants.h"
 #include "yamaha-ras13.h"
 #include "pins.h"
 #include "leds.h"
@@ -122,7 +123,7 @@ void handle_leds(int data)
 void setup()
 {
   setup_pins();
-  Serial.begin(9600);
+  Serial.begin(SERIAL_BAUD_RATE);
   irrecv.enableIRIn();
 }
 
