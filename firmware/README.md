@@ -8,7 +8,8 @@ Includes two modifications:
 ## Requirements
 
 - [Arduino Uno](httphttps://store.arduino.cc/arduino-uno-rev3)
-- [IRremote Arduino Library](http://z3t0.github.io/Arduino-IRremote/)
+- [IRremote Arduino library](http://z3t0.github.io/Arduino-IRremote/)
+- [SimpleTimer library](https://github.com/kiryanenko/SimpleTimer)
 
 ## Development
 

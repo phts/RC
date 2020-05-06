@@ -12,7 +12,9 @@ class SerialPortReader {
   start(handler) {
     this.stream.on('readable', () => {
       const data = this.stream.read().trim()
-      handler(data, (value) => this.serialPort.write(Buffer.from([value])))
+      handler(data, (value) =>
+        this.serialPort.write(typeof value === 'string' ? value : Buffer.from([value]))
+      )
     })
   }
 }

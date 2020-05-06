@@ -5,6 +5,7 @@ const {getInitialSettings, getMappings} = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
 const storage = require('./lib/storage')
+const {PING, PONG} = require('./lib/constants')
 
 const settings = getInitialSettings()
 
@@ -24,6 +25,10 @@ const simpleHandle = (button, writeToSerial) => {
 const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 
 const callHandleFn = (button, writeToSerial) => {
+  if (button === PING) {
+    writeToSerial(PONG)
+    return
+  }
   const fn = settings.noDebounce.includes(button) ? simpleHandle : debouncedHandle
   return fn(button, writeToSerial)
 }

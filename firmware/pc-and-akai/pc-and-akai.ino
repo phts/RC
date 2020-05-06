@@ -1,4 +1,5 @@
 #include <IRremote.h>
+#include <SimpleTimer.h>
 #include "constants.h"
 #include "yamaha-ras13.h"
 #include "pins.h"
@@ -9,6 +10,8 @@ decode_results results;
 bool is_pc_disabled = false;
 String last_btn = BUTTON_UNKNOWN;
 int last_leds = 0b0;
+bool is_pc_disconnected = false;
+SimpleTimer pingTimer;
 
 void send_btn(const String btn)
 {
@@ -37,7 +40,7 @@ void press_two_btns(int pin1, int pin2)
 
 void handle_btn(const String btn)
 {
-  if (btn == BUTTON_POWER_CD)
+  if (btn == BUTTON_POWER_CD && !is_pc_disconnected)
   {
     is_pc_disabled = !is_pc_disabled;
     if (is_pc_disabled)
@@ -120,22 +123,49 @@ void handle_leds(int data)
   last_leds = data;
 }
 
+void handle_pc_disconnect()
+{
+  is_pc_disconnected = true;
+  is_pc_disabled = true;
+  digitalWrite(PIN_AKAI, LOW);
+  digitalWrite(PIN_BUILTIN_LED, LOW);
+  digitalWrite(PIN_RED, LOW);
+  digitalWrite(PIN_YELLOW, LOW);
+  digitalWrite(PIN_GREEN, LOW);
+  digitalWrite(PIN_BLUE, LOW);
+  digitalWrite(PIN_WHITE, LOW);
+}
+
 void setup()
 {
   setup_pins();
   Serial.begin(SERIAL_BAUD_RATE);
   irrecv.enableIRIn();
+  pingTimer.setInterval(PING_INTERVAL);
 }
 
 void loop()
 {
+  if (!is_pc_disconnected && pingTimer.isReady())
+  {
+    Serial.println(PING);
+    String answer = Serial.readString();
+    if (answer == PONG)
+    {
+      pingTimer.reset();
+    }
+    else
+    {
+      handle_pc_disconnect();
+    }
+  }
   if (irrecv.decode(&results))
   {
     String btn = get_button_name(results.value);
     handle_btn(btn);
     irrecv.resume();
   }
-  if (Serial.available() > 0)
+  if (Serial.available())
   {
     int data = Serial.read();
     handle_leds(data);

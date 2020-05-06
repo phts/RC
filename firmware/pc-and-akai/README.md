@@ -13,3 +13,7 @@
 In order to light LEDs on the device, driver should send back an integer via serial port to Arduino. 1<sup>st</sup> bit of this number corresponds to red, 2<sup>nd</sup> &mdash; yellow, 3<sup>rd</sup> &mdash; green, 4<sup>th</sup> &mdash; blue, 5<sup>th</sup> &mdash; white. 6<sup>th</sup> bit is always `1`.
 
 For example, send `0b100011` (=35) to light red and yellow LEDs simultaneously.
+
+## Ping
+
+This modification determines if PC is disconnected. Firmware is sending "PING" string to PC via serial port every minute. Driver responds with "PONG" string. If PC is disconnected then all LEDs are turn off.
