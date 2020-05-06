@@ -21,6 +21,20 @@ particular button on a remote control.
 
 ---
 
-[![Akai GX-F37 stereo cassette deck](./doc/akai-gx-f37.jpg)](https://www.hifiengine.com/manual_library/akai/gx-f37.shtml)
+<p align="center">
+<a href="https://europe.yamaha.com/en/products/audio_visual/hifi_components/a-s501/index.html">
+<img
+  src="https://europe.yamaha.com/en/files/C16F0F418BB745F49102B5E9C3843ACC_12073_3463x1436_cce09bb4e60b3b00fb7eb63eda5c26f2.jpg"
+  alt="Yamaha A-S501 and remote control RAS13">
+</a>
+</p>
 
-[![Yamaha A-S501 and remote control RAS13](https://europe.yamaha.com/en/files/C16F0F418BB745F49102B5E9C3843ACC_12073_3463x1436_cce09bb4e60b3b00fb7eb63eda5c26f2.jpg)](https://europe.yamaha.com/en/products/audio_visual/hifi_components/a-s501/index.html)
+<p align="center">&#10084;</p>
+
+<p align="center">
+<a href="https://www.hifiengine.com/manual_library/akai/gx-f37.shtml">
+<img
+  src="https://www.hifiengine.com/images/model/akai_gx-f37_stereo_cassette_deck.jpg"
+  alt="Akai GX-F37 stereo cassette deck">
+</a>
+</p>
