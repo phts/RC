@@ -4,3 +4,13 @@ const unsigned int LED_YELLOW = 0b00010;
 const unsigned int LED_GREEN = 0b00100;
 const unsigned int LED_BLUE = 0b01000;
 const unsigned int LED_WHITE = 0b10000;
+
+void led_on(int pin)
+{
+  digitalWrite(pin, HIGH);
+}
+
+void led_off(int pin)
+{
+  digitalWrite(pin, LOW);
+}

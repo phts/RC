@@ -29,18 +29,18 @@ void handle_btn(const String btn)
     is_pc_disabled = !is_pc_disabled;
     if (is_pc_disabled)
     {
-      digitalWrite(PIN_AKAI, HIGH);
-      digitalWrite(PIN_BUILTIN_LED, HIGH);
-      digitalWrite(PIN_RED, LOW);
-      digitalWrite(PIN_YELLOW, LOW);
-      digitalWrite(PIN_GREEN, LOW);
-      digitalWrite(PIN_BLUE, LOW);
-      digitalWrite(PIN_WHITE, LOW);
+      led_on(PIN_AKAI);
+      led_on(PIN_BUILTIN_LED);
+      led_off(PIN_RED);
+      led_off(PIN_YELLOW);
+      led_off(PIN_GREEN);
+      led_off(PIN_BLUE);
+      led_off(PIN_WHITE);
     }
     else
     {
-      digitalWrite(PIN_AKAI, LOW);
-      digitalWrite(PIN_BUILTIN_LED, LOW);
+      led_off(PIN_AKAI);
+      led_off(PIN_BUILTIN_LED);
       handle_leds(last_leds);
       last_btn = BUTTON_UNKNOWN;
     }
@@ -99,11 +99,11 @@ void handle_leds(int data)
     return;
   }
   int leds = data ^ LED_OVERHEAD;
-  digitalWrite(PIN_RED, leds & LED_RED ? HIGH : LOW);
-  digitalWrite(PIN_YELLOW, leds & LED_YELLOW ? HIGH : LOW);
-  digitalWrite(PIN_GREEN, leds & LED_GREEN ? HIGH : LOW);
-  digitalWrite(PIN_BLUE, leds & LED_BLUE ? HIGH : LOW);
-  digitalWrite(PIN_WHITE, leds & LED_WHITE ? HIGH : LOW);
+  (leds & LED_RED) ? led_on(PIN_RED) : led_off(PIN_RED);
+  (leds & LED_YELLOW) ? led_on(PIN_YELLOW) : led_off(PIN_YELLOW);
+  (leds & LED_GREEN) ? led_on(PIN_GREEN) : led_off(PIN_GREEN);
+  (leds & LED_BLUE) ? led_on(PIN_BLUE) : led_off(PIN_BLUE);
+  (leds & LED_WHITE) ? led_on(PIN_WHITE) : led_off(PIN_WHITE);
   last_leds = data;
 }
 
@@ -111,13 +111,13 @@ void handle_pc_disconnect()
 {
   is_pc_disconnected = true;
   is_pc_disabled = true;
-  digitalWrite(PIN_AKAI, LOW);
-  digitalWrite(PIN_BUILTIN_LED, LOW);
-  digitalWrite(PIN_RED, LOW);
-  digitalWrite(PIN_YELLOW, LOW);
-  digitalWrite(PIN_GREEN, LOW);
-  digitalWrite(PIN_BLUE, LOW);
-  digitalWrite(PIN_WHITE, LOW);
+  led_off(PIN_AKAI);
+  led_off(PIN_BUILTIN_LED);
+  led_off(PIN_RED);
+  led_off(PIN_YELLOW);
+  led_off(PIN_GREEN);
+  led_off(PIN_BLUE);
+  led_off(PIN_WHITE);
 }
 
 void setup()
