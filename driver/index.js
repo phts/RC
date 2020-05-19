@@ -1,29 +1,41 @@
 'use strict'
 
 const debounce = require('debounce')
-const settings = require('./lib/settings')
+const {getInitialSettings, getMappings} = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
+const storage = require('./lib/storage')
+const {PING, PONG} = require('./lib/constants')
 
-const simpleHandle = async (button) => {
-  const actions = settings.mappings[button]
+const settings = getInitialSettings()
+
+const simpleHandle = (button, writeToSerial) => {
+  const actions = getMappings()[button]
   if (!actions) {
     console.warn(`Action not found for remote control button "${button}"`)
     return
   }
 
-  try {
-    await run(actions)
-  } catch (e) {
+  run(actions, writeToSerial).catch((e) => {
     console.error(e.message)
     process.exit(1)
-  }
+  })
 }
 
 const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 
-const callHandleFn = (button) => {
-  return (settings.noDebounce.includes(button) ? simpleHandle : debouncedHandle)(button)
+const callHandleFn = (button, writeToSerial) => {
+  if (button === PING) {
+    writeToSerial(PONG)
+    return
+  }
+  const fn = settings.noDebounce.includes(button) ? simpleHandle : debouncedHandle
+  return fn(button, writeToSerial)
+}
+
+if (settings.initialState) {
+  storage.setValues([settings.initialState])
+  storage.toggleNextValue()
 }
 
 const reader = new SerialPortReader(settings.serialPort)

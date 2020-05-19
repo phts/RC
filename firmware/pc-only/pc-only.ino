@@ -1,5 +1,6 @@
 #include <IRremote.h>
-#include "lib/yamaha-ras13.h"
+#include "constants.h"
+#include "yamaha-ras13.h"
 
 const int RECV_PIN = 8;
 IRrecv irrecv(RECV_PIN);
@@ -8,7 +9,7 @@ String last_btn = BUTTON_UNKNOWN;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(SERIAL_BAUD_RATE);
   irrecv.enableIRIn();
   irrecv.blink13(true);
 }

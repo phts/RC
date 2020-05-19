@@ -9,27 +9,37 @@ const run = require('../../lib/run')
 
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('robotjs', () => ({
+  getMousePos: jest.fn(),
   keyTap: jest.fn(),
   mouseClick: jest.fn(),
   moveMouse: jest.fn(),
   moveMouseSmooth: jest.fn(),
+  scrollMouse: jest.fn(),
   setMouseDelay: jest.fn(),
 }))
 jest.mock('child_process', () => ({
   execFileSync: jest.fn(),
 }))
 
+function toBinaryStr(number) {
+  return `0b${number.toString(2).padStart(4, '0')}`
+}
+
 describe('run', () => {
   let actions
+  let writeToSerial
 
   beforeEach(() => {
     execFileSync.mockClear()
     psList.mockReset()
+    robot.getMousePos.mockClear()
     robot.keyTap.mockClear()
     robot.mouseClick.mockClear()
     robot.moveMouse.mockClear()
     robot.moveMouseSmooth.mockClear()
+    robot.scrollMouse.mockClear()
     robot.setMouseDelay.mockClear()
+    writeToSerial = jest.fn()
   })
 
   describe('when "exec" action', () => {
@@ -248,7 +258,7 @@ describe('run', () => {
         mouse: {unsupported: true},
       }
       await expect(run(actions)).rejects.toThrow(
-        '"mouse" must contain any of supported actions: click, delay, move, moveSmooth'
+        '"mouse" must contain any of supported actions: click, delay, doubleClick, move, moveSmooth, moveRelative, moveRelativeSmooth, scroll'
       )
     })
 
@@ -272,6 +282,16 @@ describe('run', () => {
       expect(robot.setMouseDelay).toHaveBeenCalledWith(30)
     })
 
+    it('emulates mouse double click if action is "doubleClick"', async () => {
+      actions = {
+        mouse: {doubleClick: 'right'},
+      }
+      await run(actions)
+
+      expect(robot.mouseClick).toHaveBeenCalledTimes(1)
+      expect(robot.mouseClick).toHaveBeenCalledWith('right', true)
+    })
+
     it('moves mouse if action is "move"', async () => {
       actions = {
         mouse: {move: [11, 22]},
@@ -290,6 +310,38 @@ describe('run', () => {
 
       expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
       expect(robot.moveMouseSmooth).toHaveBeenCalledWith(11, 22)
+    })
+
+    it('moves mouse relative to current position if action is "moveRelative"', async () => {
+      jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
+      actions = {
+        mouse: {moveRelative: [11, 22]},
+      }
+      await run(actions)
+
+      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
+    })
+
+    it('moves mouse smoothly relative to current position if action is "moveRelativeSmooth"', async () => {
+      jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
+      actions = {
+        mouse: {moveRelativeSmooth: [11, 22]},
+      }
+      await run(actions)
+
+      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(111, 222)
+    })
+
+    it('emulates mouse scroll if action is "scroll"', async () => {
+      actions = {
+        mouse: {scroll: 100},
+      }
+      await run(actions)
+
+      expect(robot.scrollMouse).toHaveBeenCalledTimes(1)
+      expect(robot.scrollMouse).toHaveBeenCalledWith(0, 100)
     })
 
     it('is able to run multiple actions', async () => {
@@ -324,6 +376,104 @@ describe('run', () => {
 
       await run(actions)
       expect(storage.getCurrentValue()).toEqual('state1')
+    })
+  })
+
+  describe('when "led" action', () => {
+    const EXPECTED_OVERHEAD = 0b100000
+    const EXPECTED = {
+      red: EXPECTED_OVERHEAD ^ 0b00001,
+      yellow: EXPECTED_OVERHEAD ^ 0b00010,
+      green: EXPECTED_OVERHEAD ^ 0b00100,
+      blue: EXPECTED_OVERHEAD ^ 0b01000,
+      white: EXPECTED_OVERHEAD ^ 0b10000,
+    }
+
+    it('rejects if "led" has wrong type', async () => {
+      actions = {
+        led: {wrong: 'type'},
+      }
+
+      await expect(run(actions)).rejects.toThrow('"led" must be a string or an array')
+    })
+
+    it('rejects if "led" has wrong value', async () => {
+      actions = {
+        led: 'wrong',
+      }
+
+      await expect(run(actions)).rejects.toThrow(
+        'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue, white.'
+      )
+    })
+
+    describe('when value is a string', () => {
+      Object.entries(EXPECTED).forEach(([color, expected]) => {
+        it(`writes ${expected} (${toBinaryStr(
+          expected
+        )}) into serial port if led="${color}"`, async () => {
+          actions = {
+            led: color,
+          }
+          await run(actions, writeToSerial)
+
+          expect(writeToSerial).toHaveBeenCalledTimes(1)
+          expect(writeToSerial).toHaveBeenCalledWith(expected)
+        })
+      })
+    })
+
+    describe('when value is an empty array', () => {
+      it(`writes ${EXPECTED_OVERHEAD} (${toBinaryStr(
+        EXPECTED_OVERHEAD
+      )}) into serial port to turn off all LEDs`, async () => {
+        writeToSerial.mockClear()
+        actions = {
+          led: [],
+        }
+        await run(actions, writeToSerial)
+        expect(writeToSerial).toHaveBeenCalledTimes(1)
+        expect(writeToSerial).toHaveBeenCalledWith(EXPECTED_OVERHEAD)
+      })
+    })
+
+    describe('when value is a non-empty array', () => {
+      it('writes bitwise OR of all array items into serial port', async () => {
+        for (const r of [[], ['red']]) {
+          for (const y of [[], ['yellow']]) {
+            for (const g of [[], ['green']]) {
+              for (const b of [[], ['blue']]) {
+                for (const w of [[], ['white']]) {
+                  writeToSerial.mockClear()
+                  const led = [...r, ...y, ...g, ...b, ...w]
+                  if (led.length === 0) {
+                    return
+                  }
+                  actions = {
+                    led,
+                  }
+                  await run(actions, writeToSerial)
+                  const expected = led.reduce((acc, l) => {
+                    return acc | EXPECTED[l]
+                  }, EXPECTED_OVERHEAD)
+
+                  expect(writeToSerial).toHaveBeenCalledTimes(1)
+                  expect(writeToSerial).toHaveBeenCalledWith(expected)
+                }
+              }
+            }
+          }
+        }
+      })
+
+      it('rejects if array contains wrong values', async () => {
+        actions = {
+          led: ['red', 'wrong', 'yellow'],
+        }
+        await expect(run(actions)).rejects.toThrow(
+          'LED value "wrong" is unsupported. Supported values are: red, yellow, green, blue, white.'
+        )
+      })
     })
   })
 

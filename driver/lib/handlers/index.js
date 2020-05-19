@@ -2,9 +2,9 @@
 
 const handlers = require('require-directory')(module, {recurse: false})
 
-async function runHandlers(action) {
+async function runHandlers(action, writeToSerial) {
   for (const k in handlers) {
-    const handled = await handlers[k](action)
+    const handled = await handlers[k](action, writeToSerial)
     if (handled) {
       return true
     }

@@ -10,4 +10,5 @@ module.exports = function state(action) {
 
   storage.setValues(values)
   storage.toggleNextValue()
+  return true
 }

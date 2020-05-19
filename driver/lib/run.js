@@ -2,11 +2,11 @@
 
 const runHandlers = require('./handlers')
 
-module.exports = async function run(actions) {
+module.exports = async function run(actions, writeToSerial) {
   if (!Array.isArray(actions)) {
     actions = [actions]
   }
-  for (const act of actions) {
-    await runHandlers(act)
+  for (const a of actions) {
+    await runHandlers(a, writeToSerial)
   }
 }

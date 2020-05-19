@@ -1,17 +1,22 @@
 'use strict'
 
 const SerialPort = require('serialport')
+const {SERIAL_BAUD_RATE} = require('./constants')
 
-module.exports = class SerialPortReader {
+class SerialPortReader {
   constructor(port) {
-    const serialPort = new SerialPort(port)
-    this.lineStream = serialPort.pipe(new SerialPort.parsers.Readline())
+    this.serialPort = new SerialPort(port, {baudRate: SERIAL_BAUD_RATE})
+    this.stream = this.serialPort.pipe(new SerialPort.parsers.Readline())
   }
 
   start(handler) {
-    this.lineStream.on('readable', () => {
-      const data = this.lineStream.read().trim()
-      handler(data)
+    this.stream.on('readable', () => {
+      const data = this.stream.read().trim()
+      handler(data, (value) =>
+        this.serialPort.write(typeof value === 'string' ? value : Buffer.from([value]))
+      )
     })
   }
 }
+
+module.exports = SerialPortReader

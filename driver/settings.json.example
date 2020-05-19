@@ -18,16 +18,12 @@
     "eject": {"state": ["state1", "state2"]},
     "fun3": {
       "if": {"state": "state1"},
-      "then": [
-        {
-          "exec": "app4.exe"
-        }
-      ],
-      "else": [
-        {
-          "exec": "app5.exe"
-        }
-      ]
+      "then": {
+        "led": "red"
+      },
+      "else": {
+        "led": ["yellow", "green"]
+      }
     }
   }
 }

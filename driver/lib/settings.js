@@ -1,15 +1,27 @@
 'use strict'
 
-const rawSettings = require('../settings.json')
+const SETTINGS_PATH = require('path').resolve(__dirname, '../settings.json')
 
-if (!rawSettings.serialPort) {
+const initialSettings = require('cjson').load(SETTINGS_PATH)
+
+if (!initialSettings.serialPort) {
   throw new Error('serialPort is required')
+}
+if (!initialSettings.mappings) {
+  throw new Error('mappings is required')
 }
 
 const DEFAULT_SETTINGS = {
   debounceDelay: 150,
+  initialState: null,
   noDebounce: [],
-  mappings: {},
 }
 
-module.exports = Object.assign({}, DEFAULT_SETTINGS, rawSettings)
+module.exports = {
+  getInitialSettings() {
+    return Object.assign({}, DEFAULT_SETTINGS, initialSettings)
+  },
+  getMappings() {
+    return require('cjson').load(SETTINGS_PATH).mappings
+  },
+}
