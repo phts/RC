@@ -1,8 +1,12 @@
 # [PC + Akai GX-F37 cassette deck](./pc-and-akai.ino)
 
+Project on EasyEDA: https://easyeda.com/phts/arduino-pc-remote-control
+
 <image width=500 src="../doc/pc-and-akai-circuit.jpg">
 
 <image width=500 src="../doc/pc-and-akai-proto.jpg">
+
+## Features
 
 - "CD power" button to switch control between PC and Akai
 - Supports receiving signals via serial port from driver to light LEDs (red, yellow, green, blue, white)
