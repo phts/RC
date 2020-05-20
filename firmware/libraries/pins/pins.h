@@ -7,12 +7,12 @@ const int PIN_REC = 7;
 const int PIN_MUTE = 8;
 const int PIN_IR = 9;
 const int PIN_BUILTIN_LED = LED_BUILTIN;
-const int PIN_AKAI = A0;
-const int PIN_RED = A1;
-const int PIN_YELLOW = A2;
-const int PIN_GREEN = A3;
-const int PIN_BLUE = A4;
-const int PIN_WHITE = A5;
+const int PIN_RED = A0;
+const int PIN_YELLOW = A1;
+const int PIN_GREEN = A2;
+const int PIN_BLUE = A3;
+const int PIN_WHITE = A4;
+const int PIN_AKAI = A5;
 
 void setup_pins()
 {
