@@ -9,11 +9,6 @@ are configurable.
 Arduino firmware which receives signals from an IR receiver, converts them into human-readable
 strings and writes them to serial port.
 
-Two versions available:
-
-- PC-only control
-- PC and Akai GX-F37 cassette deck control
-
 ## [Driver](./driver)
 
 This is a Node.js application which reads serial port and performs actions associated with the
