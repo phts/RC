@@ -1,8 +1,8 @@
-const int PIN_FF = 2;
-const int PIN_REW = 3;
-const int PIN_PLAY = 4;
-const int PIN_STOP = 5;
-const int PIN_PAUSE = 6;
+const int PIN_PAUSE = 2;
+const int PIN_FF = 3;
+const int PIN_REW = 4;
+const int PIN_PLAY = 5;
+const int PIN_STOP = 6;
 const int PIN_REC = 7;
 const int PIN_MUTE = 8;
 const int PIN_IR = 9;
@@ -16,11 +16,11 @@ const int PIN_AKAI = A5;
 
 void setup_pins()
 {
+  pinMode(PIN_PAUSE, OUTPUT);
   pinMode(PIN_FF, OUTPUT);
   pinMode(PIN_REW, OUTPUT);
   pinMode(PIN_PLAY, OUTPUT);
   pinMode(PIN_STOP, OUTPUT);
-  pinMode(PIN_PAUSE, OUTPUT);
   pinMode(PIN_REC, OUTPUT);
   pinMode(PIN_MUTE, OUTPUT);
   pinMode(PIN_IR, OUTPUT);
