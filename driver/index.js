@@ -6,10 +6,16 @@ const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
 const storage = require('./lib/storage')
 const {PING, PONG} = require('./lib/constants')
+const debug = require('./lib/debug')
+
+if (process.argv.includes('--debug')) {
+  debug.enable()
+}
 
 const settings = getInitialSettings()
 
 const simpleHandle = (button, writeToSerial) => {
+  debug.input(button)
   const actions = getMappings()[button]
   if (!actions) {
     console.warn(`Action not found for remote control button "${button}"`)
@@ -26,6 +32,7 @@ const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 
 const callHandleFn = (button, writeToSerial) => {
   if (button === PING) {
+    debug.input(PING)
     writeToSerial(PONG)
     return
   }

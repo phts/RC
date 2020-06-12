@@ -41,9 +41,17 @@ $ npm i
 
 ## Usage
 
-```bash
-$ npm start
-```
+- Run in normal mode:
+
+  ```bash
+  $ npm start
+  ```
+
+- Run in debug mode:
+
+  ```bash
+  $ npm run start:debug
+  ```
 
 ## Configuration
 

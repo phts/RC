@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node index.js",
+    "start:debug": "npm start -- --debug",
     "test": "jest"
   },
   "repository": {

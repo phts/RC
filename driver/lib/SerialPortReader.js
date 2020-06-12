@@ -2,6 +2,7 @@
 
 const SerialPort = require('serialport')
 const {SERIAL_BAUD_RATE} = require('./constants')
+const debug = require('./debug')
 
 class SerialPortReader {
   constructor(port) {
@@ -12,9 +13,11 @@ class SerialPortReader {
   start(handler) {
     this.stream.on('readable', () => {
       const data = this.stream.read().trim()
-      handler(data, (value) =>
-        this.serialPort.write(typeof value === 'string' ? value : Buffer.from([value]))
-      )
+      handler(data, (value) => {
+        value = typeof value === 'string' ? value : Buffer.from([value])
+        debug.output(value)
+        this.serialPort.write(value)
+      })
     })
   }
 }

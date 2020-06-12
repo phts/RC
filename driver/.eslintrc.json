@@ -5,5 +5,13 @@
     "@phts/eslint-config/addons/node",
     "@phts/eslint-config/addons/jest",
     "@phts/eslint-config/addons/prettier"
+  ],
+  "overrides": [
+    {
+      "files": "lib/debug.js",
+      "rules": {
+        "no-console": "off"
+      }
+    }
   ]
 }

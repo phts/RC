@@ -1,5 +1,7 @@
 'use strict'
 
+const debug = require('./debug')
+
 let storage = null
 
 function isSameValues(newValues) {
@@ -22,6 +24,7 @@ function setValues(values) {
 function toggleNextValue() {
   const nextIndex = (storage.current + 1) % storage.values.length
   storage.current = nextIndex
+  debug.internal('state: ', getCurrentValue())
 }
 
 function getCurrentValue() {
