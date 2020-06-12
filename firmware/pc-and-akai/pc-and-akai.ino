@@ -30,7 +30,6 @@ void handle_btn(const String btn)
     if (is_pc_disabled)
     {
       led_on(PIN_AKAI);
-      led_on(PIN_BUILTIN_LED);
       led_off(PIN_RED);
       led_off(PIN_YELLOW);
       led_off(PIN_GREEN);
@@ -40,7 +39,6 @@ void handle_btn(const String btn)
     else
     {
       led_off(PIN_AKAI);
-      led_off(PIN_BUILTIN_LED);
       handle_leds(last_leds);
       last_btn = BUTTON_UNKNOWN;
     }
@@ -112,7 +110,6 @@ void handle_pc_disconnect()
   is_pc_disconnected = true;
   is_pc_disabled = true;
   led_off(PIN_AKAI);
-  led_off(PIN_BUILTIN_LED);
   led_off(PIN_RED);
   led_off(PIN_YELLOW);
   led_off(PIN_GREEN);
@@ -125,6 +122,7 @@ void setup()
   setup_pins();
   Serial.begin(SERIAL_BAUD_RATE);
   irrecv.enableIRIn();
+  irrecv.blink13(true);
   pingTimer.setInterval(PING_INTERVAL);
 }
 
