@@ -1,18 +1,18 @@
 #include <IRremote.h>
-#include <SimpleTimer.h>
 #include "constants.h"
 #include "yamaha-ras13.h"
 #include "akai-gx-f37.h"
 #include "pins.h"
 #include "leds.h"
+#include "Ping.h"
 
 IRrecv irrecv(PIN_IR);
+Ping ping(PING_INTERVAL);
 decode_results results;
 bool is_pc_disabled = false;
 String last_btn = BUTTON_UNKNOWN;
 int last_leds = 0b0;
 bool is_pc_disconnected = false;
-SimpleTimer pingTimer;
 
 void send_btn(const String btn)
 {
@@ -123,23 +123,14 @@ void setup()
   Serial.begin(SERIAL_BAUD_RATE);
   irrecv.enableIRIn();
   irrecv.blink13(true);
-  pingTimer.setInterval(PING_INTERVAL);
+  ping.setup();
 }
 
 void loop()
 {
-  if (!is_pc_disconnected && pingTimer.isReady())
+  if (!is_pc_disconnected && !ping.check())
   {
-    Serial.println(PING);
-    String answer = Serial.readString();
-    if (answer == PONG)
-    {
-      pingTimer.reset();
-    }
-    else
-    {
-      handle_pc_disconnect();
-    }
+    handle_pc_disconnect();
   }
   if (irrecv.decode(&results))
   {
