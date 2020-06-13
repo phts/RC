@@ -8,84 +8,93 @@
 
 IrReceiver irReceiver(PIN_IR);
 Ping ping(PING_INTERVAL);
-bool is_pc_disabled = false;
+bool is_pc_enabled = true;
+bool is_pc_connected = true;
 String last_btn = BUTTON_UNKNOWN;
 int last_leds = 0b0;
-bool is_pc_disconnected = false;
 
 void send_btn(const String btn)
 {
-  if (!is_pc_disabled && btn != BUTTON_UNKNOWN)
+  if (is_pc_enabled && btn != BUTTON_UNKNOWN)
   {
     Serial.println(btn);
   }
 }
 
-void handle_btn(const String btn)
+void toggle_pc()
 {
-  if (btn == BUTTON_POWER_CD && !is_pc_disconnected)
+  is_pc_enabled = !is_pc_enabled;
+  if (!is_pc_enabled)
   {
-    is_pc_disabled = !is_pc_disabled;
-    if (is_pc_disabled)
-    {
-      led_on(PIN_AKAI);
-      led_off(PIN_RED);
-      led_off(PIN_YELLOW);
-      led_off(PIN_GREEN);
-      led_off(PIN_BLUE);
-      led_off(PIN_WHITE);
-    }
-    else
-    {
-      led_off(PIN_AKAI);
-      handle_leds(last_leds);
-      last_btn = BUTTON_UNKNOWN;
-    }
-    return;
-  }
-
-  if (is_pc_disabled)
-  {
-    if (btn == BUTTON_PLAY)
-    {
-      press_btn(PIN_PLAY);
-    }
-    else if (btn == BUTTON_STOP)
-    {
-      press_btn(PIN_STOP);
-    }
-    else if (btn == BUTTON_PREV)
-    {
-      press_btn(PIN_REW);
-    }
-    else if (btn == BUTTON_NEXT)
-    {
-      press_btn(PIN_FF);
-    }
-    else if (btn == BUTTON_PAUSE)
-    {
-      press_btn(PIN_PAUSE);
-    }
-    else if (btn == BUTTON_DISK_SKIP)
-    {
-      press_btn(PIN_MUTE);
-    }
-    else if (btn == BUTTON_MEMORY)
-    {
-      press_two_btns(PIN_REC, PIN_PAUSE);
-    }
+    led_on(PIN_AKAI);
+    led_off(PIN_RED);
+    led_off(PIN_YELLOW);
+    led_off(PIN_GREEN);
+    led_off(PIN_BLUE);
+    led_off(PIN_WHITE);
   }
   else
   {
-    if (btn == BUTTON_REPEAT)
-    {
-      send_btn(last_btn);
-    }
-    else
-    {
-      send_btn(btn);
-      last_btn = btn;
-    }
+    led_off(PIN_AKAI);
+    handle_leds(last_leds);
+    last_btn = BUTTON_UNKNOWN;
+  }
+}
+
+void handle_akai_btn(const String btn)
+{
+  if (btn == BUTTON_PLAY)
+  {
+    press_btn(PIN_PLAY);
+  }
+  else if (btn == BUTTON_STOP)
+  {
+    press_btn(PIN_STOP);
+  }
+  else if (btn == BUTTON_PREV)
+  {
+    press_btn(PIN_REW);
+  }
+  else if (btn == BUTTON_NEXT)
+  {
+    press_btn(PIN_FF);
+  }
+  else if (btn == BUTTON_PAUSE)
+  {
+    press_btn(PIN_PAUSE);
+  }
+  else if (btn == BUTTON_DISK_SKIP)
+  {
+    press_btn(PIN_MUTE);
+  }
+  else if (btn == BUTTON_MEMORY)
+  {
+    press_two_btns(PIN_REC, PIN_PAUSE);
+  }
+}
+
+void handle_btn(const String btn)
+{
+  if (btn == BUTTON_POWER_CD && is_pc_connected)
+  {
+    toggle_pc();
+    return;
+  }
+
+  if (!is_pc_enabled)
+  {
+    handle_akai_btn(btn);
+    return;
+  }
+
+  if (btn == BUTTON_REPEAT)
+  {
+    send_btn(last_btn);
+  }
+  else
+  {
+    send_btn(btn);
+    last_btn = btn;
   }
 }
 
@@ -106,8 +115,8 @@ void handle_leds(int data)
 
 void handle_pc_disconnect()
 {
-  is_pc_disconnected = true;
-  is_pc_disabled = true;
+  is_pc_connected = false;
+  is_pc_enabled = false;
   led_off(PIN_AKAI);
   led_off(PIN_RED);
   led_off(PIN_YELLOW);
@@ -132,7 +141,7 @@ void setup()
 
 void loop()
 {
-  if (!is_pc_disconnected && !ping.check())
+  if (is_pc_connected && !ping.check())
   {
     handle_pc_disconnect();
   }
