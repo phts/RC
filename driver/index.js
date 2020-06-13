@@ -15,7 +15,6 @@ if (process.argv.includes('--debug')) {
 const settings = getInitialSettings()
 
 const simpleHandle = (button, writeToSerial) => {
-  debug.input(button)
   const actions = getMappings()[button]
   if (!actions) {
     console.warn(`Action not found for remote control button "${button}"`)
@@ -31,8 +30,8 @@ const simpleHandle = (button, writeToSerial) => {
 const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 
 const callHandleFn = (button, writeToSerial) => {
+  debug.input(button)
   if (button === PING) {
-    debug.input(PING)
     writeToSerial(PONG)
     return
   }
