@@ -1,14 +1,13 @@
-#include <IRremote.h>
 #include "constants.h"
 #include "yamaha-ras13.h"
 #include "akai-gx-f37.h"
 #include "pins.h"
 #include "leds.h"
+#include "IrReceiver.h"
 #include "Ping.h"
 
-IRrecv irrecv(PIN_IR);
+IrReceiver irReceiver(PIN_IR);
 Ping ping(PING_INTERVAL);
-decode_results results;
 bool is_pc_disabled = false;
 String last_btn = BUTTON_UNKNOWN;
 int last_leds = 0b0;
@@ -117,12 +116,17 @@ void handle_pc_disconnect()
   led_off(PIN_WHITE);
 }
 
+void handle_ir_code(const unsigned long code)
+{
+  String btn = get_button_name(code);
+  handle_btn(btn);
+}
+
 void setup()
 {
   setup_pins();
   Serial.begin(SERIAL_BAUD_RATE);
-  irrecv.enableIRIn();
-  irrecv.blink13(true);
+  irReceiver.setup();
   ping.setup();
 }
 
@@ -132,12 +136,9 @@ void loop()
   {
     handle_pc_disconnect();
   }
-  if (irrecv.decode(&results))
-  {
-    String btn = get_button_name(results.value);
-    handle_btn(btn);
-    irrecv.resume();
-  }
+
+  irReceiver.receive(handle_ir_code);
+
   if (Serial.available())
   {
     int data = Serial.read();
