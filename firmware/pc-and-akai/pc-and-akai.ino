@@ -24,7 +24,13 @@ void send_btn(const String btn)
 void toggle_pc()
 {
   is_pc_enabled = !is_pc_enabled;
-  if (!is_pc_enabled)
+  if (is_pc_enabled)
+  {
+    led_off(PIN_AKAI);
+    handle_leds(last_leds);
+    last_btn = BUTTON_UNKNOWN;
+  }
+  else
   {
     led_on(PIN_AKAI);
     led_off(PIN_RED);
@@ -32,12 +38,6 @@ void toggle_pc()
     led_off(PIN_GREEN);
     led_off(PIN_BLUE);
     led_off(PIN_WHITE);
-  }
-  else
-  {
-    led_off(PIN_AKAI);
-    handle_leds(last_leds);
-    last_btn = BUTTON_UNKNOWN;
   }
 }
 
