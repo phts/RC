@@ -6,6 +6,8 @@ Project on EasyEDA: https://easyeda.com/phts/arduino-pc-remote-control
 
 <image width=500 src="../doc/pc-and-akai-proto.jpg">
 
+<image width=500 src="../doc/pc-and-akai-real.jpg">
+
 ## Features
 
 - "CD power" button to switch control between PC and Akai
