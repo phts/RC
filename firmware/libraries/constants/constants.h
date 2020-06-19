@@ -1,2 +1,2 @@
 const unsigned int SERIAL_BAUD_RATE = 9600;
-const unsigned int PING_INTERVAL = 60000;
+const uint64_t PING_INTERVAL = 180000;
