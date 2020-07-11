@@ -6,25 +6,29 @@ function enable() {
   enabled = true
 }
 
+function log(...args) {
+  console.log(new Date().toLocaleTimeString(), ...args)
+}
+
 function input(...args) {
   if (!enabled) {
     return
   }
-  console.log('>', ...args)
+  log('>', ...args)
 }
 
 function output(...args) {
   if (!enabled) {
     return
   }
-  console.log('<', ...args)
+  log('<', ...args)
 }
 
 function internal(...args) {
   if (!enabled) {
     return
   }
-  console.log('~', ...args)
+  log('~', ...args)
 }
 
 module.exports = {
