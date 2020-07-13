@@ -5,7 +5,7 @@ const {getInitialSettings, getMappings} = require('./lib/settings')
 const run = require('./lib/run')
 const SerialPortReader = require('./lib/SerialPortReader')
 const storage = require('./lib/storage')
-const {PING, PONG} = require('./lib/constants')
+const {PING, PONG, FIRMWARE_DEBUG} = require('./lib/constants')
 const debug = require('./lib/debug')
 
 if (process.argv.includes('--debug')) {
@@ -31,6 +31,9 @@ const debouncedHandle = debounce(simpleHandle, settings.debounceDelay, true)
 
 const callHandleFn = (button, writeToSerial) => {
   debug.input(button)
+  if (button.startsWith(FIRMWARE_DEBUG)) {
+    return
+  }
   if (button === PING) {
     writeToSerial(PONG)
     return

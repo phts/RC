@@ -24,6 +24,7 @@ void send_btn(const String btn)
 void toggle_pc()
 {
   is_pc_enabled = !is_pc_enabled;
+  Serial.println(String("DEBUG: toggle_pc() is_pc_enabled=") + is_pc_enabled);
   if (is_pc_enabled)
   {
     led_off(PIN_AKAI);
@@ -43,6 +44,7 @@ void toggle_pc()
 
 void handle_akai_btn(const String btn)
 {
+  Serial.println("DEBUG: handle_akai_btn() btn=" + btn);
   if (btn == BUTTON_PLAY)
   {
     press_btn(PIN_PLAY);
@@ -100,6 +102,8 @@ void handle_btn(const String btn)
 
 void handle_leds(int data)
 {
+  Serial.println(String("DEBUG: handle_leds()") +
+                 String(" data=") + data);
   if (data == 0xA || data == -1)
   {
     return;
@@ -115,6 +119,7 @@ void handle_leds(int data)
 
 void handle_pc_disconnect()
 {
+  Serial.println("DEBUG: handle_pc_disconnect()");
   is_pc_connected = false;
   is_pc_enabled = false;
   led_off(PIN_AKAI);
@@ -127,6 +132,12 @@ void handle_pc_disconnect()
 
 void handle_ir_code(const unsigned long code)
 {
+  Serial.println(String("DEBUG: handle_ir_code()") +
+                 String(" code=") + code +
+                 String(" is_pc_enabled=") + is_pc_enabled +
+                 String(" is_pc_connected=") + is_pc_connected +
+                 String(" last_btn=") + last_btn +
+                 String(" last_leds=") + last_leds);
   String btn = get_button_name(code);
   handle_btn(btn);
 }
