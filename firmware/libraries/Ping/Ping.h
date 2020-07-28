@@ -1,4 +1,5 @@
 #include <SimpleTimer.h>
+#include "debug.h"
 
 const String PING = "PING";
 const String PONG = "PONG";
@@ -27,6 +28,7 @@ public:
       return true;
     }
 
+    debug(PING);
     Serial.println(PING);
     String answer = Serial.readString();
     if (answer != PONG)
