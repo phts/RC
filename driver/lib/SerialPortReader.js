@@ -7,12 +7,11 @@ const debug = require('./debug')
 class SerialPortReader {
   constructor(port) {
     this.serialPort = new SerialPort(port, {baudRate: SERIAL_BAUD_RATE})
-    this.stream = this.serialPort.pipe(new SerialPort.parsers.Readline())
+    this.stream = this.serialPort.pipe(new SerialPort.parsers.Readline({delimiter: '\r\n'}))
   }
 
   start(handler) {
-    this.stream.on('readable', () => {
-      const data = this.stream.read().trim()
+    this.stream.on('data', (data) => {
       handler(data, (value) => {
         value = typeof value === 'string' ? value : Buffer.from([value])
         debug.output(value)
