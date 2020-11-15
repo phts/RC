@@ -10,6 +10,7 @@ const run = require('../../lib/run')
 jest.mock('ps-list', () => jest.fn(async () => {}))
 jest.mock('robotjs', () => ({
   getMousePos: jest.fn(),
+  getScreenSize: jest.fn(),
   keyTap: jest.fn(),
   mouseClick: jest.fn(),
   moveMouse: jest.fn(),
@@ -33,6 +34,7 @@ describe('run', () => {
     execFileSync.mockClear()
     psList.mockReset()
     robot.getMousePos.mockClear()
+    robot.getScreenSize.mockClear()
     robot.keyTap.mockClear()
     robot.mouseClick.mockClear()
     robot.moveMouse.mockClear()
@@ -312,26 +314,80 @@ describe('run', () => {
       expect(robot.moveMouseSmooth).toHaveBeenCalledWith(11, 22)
     })
 
-    it('moves mouse relative to current position if action is "moveRelative"', async () => {
-      jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
-      actions = {
-        mouse: {moveRelative: [11, 22]},
-      }
-      await run(actions)
+    describe('when action is "moveRelative"', () => {
+      beforeEach(() => {
+        jest.spyOn(robot, 'getScreenSize').mockReturnValue({height: 1000, width: 2000})
+      })
+      it('moves mouse relative to current position', async () => {
+        jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
+        actions = {
+          mouse: {moveRelative: [11, 22]},
+        }
+        await run(actions)
 
-      expect(robot.moveMouse).toHaveBeenCalledTimes(1)
-      expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
+        expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+        expect(robot.moveMouse).toHaveBeenCalledWith(111, 222)
+      })
+
+      it('moves mouse back if moved outside of screen height', async () => {
+        jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 950})
+        actions = {
+          mouse: {moveRelative: [11, 100]},
+        }
+        await run(actions)
+
+        expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+        expect(robot.moveMouse).toHaveBeenCalledWith(111, 50)
+      })
+
+      it('moves mouse back if moved outside of screen width', async () => {
+        jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 1950, y: 200})
+        actions = {
+          mouse: {moveRelative: [100, 22]},
+        }
+        await run(actions)
+
+        expect(robot.moveMouse).toHaveBeenCalledTimes(1)
+        expect(robot.moveMouse).toHaveBeenCalledWith(50, 222)
+      })
     })
 
-    it('moves mouse smoothly relative to current position if action is "moveRelativeSmooth"', async () => {
-      jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
-      actions = {
-        mouse: {moveRelativeSmooth: [11, 22]},
-      }
-      await run(actions)
+    describe('when action is "moveRelativeSmooth"', () => {
+      beforeEach(() => {
+        jest.spyOn(robot, 'getScreenSize').mockReturnValue({height: 1000, width: 2000})
+      })
+      it('moves mouse smoothly relative to current position', async () => {
+        jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 200})
+        actions = {
+          mouse: {moveRelativeSmooth: [11, 22]},
+        }
+        await run(actions)
 
-      expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
-      expect(robot.moveMouseSmooth).toHaveBeenCalledWith(111, 222)
+        expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+        expect(robot.moveMouseSmooth).toHaveBeenCalledWith(111, 222)
+      })
+
+      it('moves mouse smoothly back if moved outside of screen height', async () => {
+        jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 100, y: 950})
+        actions = {
+          mouse: {moveRelativeSmooth: [11, 100]},
+        }
+        await run(actions)
+
+        expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+        expect(robot.moveMouseSmooth).toHaveBeenCalledWith(111, 50)
+      })
+
+      it('moves mouse smoothly back if moved outside of screen width', async () => {
+        jest.spyOn(robot, 'getMousePos').mockReturnValue({x: 1950, y: 200})
+        actions = {
+          mouse: {moveRelativeSmooth: [100, 22]},
+        }
+        await run(actions)
+
+        expect(robot.moveMouseSmooth).toHaveBeenCalledTimes(1)
+        expect(robot.moveMouseSmooth).toHaveBeenCalledWith(50, 222)
+      })
     })
 
     it('emulates mouse scroll if action is "scroll"', async () => {

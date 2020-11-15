@@ -2,6 +2,17 @@
 
 const robot = require('optional')('robotjs')
 
+function cyclicCoords(x, y) {
+  const screenSize = robot.getScreenSize()
+  if (x > screenSize.width) {
+    x = x - screenSize.width
+  }
+  if (y >= screenSize.height) {
+    y = y - screenSize.height
+  }
+  return [x, y]
+}
+
 const MOUSE_FNS = {
   click: (button) => robot.mouseClick(button),
   delay: (delay) => robot.setMouseDelay(delay),
@@ -10,11 +21,11 @@ const MOUSE_FNS = {
   moveSmooth: (coords) => robot.moveMouseSmooth(coords[0], coords[1]),
   moveRelative: (coords) => {
     const pos = robot.getMousePos()
-    robot.moveMouse(pos.x + coords[0], pos.y + coords[1])
+    robot.moveMouse(...cyclicCoords(pos.x + coords[0], pos.y + coords[1]))
   },
   moveRelativeSmooth: (coords) => {
     const pos = robot.getMousePos()
-    robot.moveMouseSmooth(pos.x + coords[0], pos.y + coords[1])
+    robot.moveMouseSmooth(...cyclicCoords(pos.x + coords[0], pos.y + coords[1]))
   },
   scroll: (distance) => robot.scrollMouse(0, distance),
 }
