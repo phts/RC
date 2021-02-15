@@ -10,6 +10,7 @@ Project on EasyEDA: https://easyeda.com/phts/arduino-pc-remote-control
 
 ## Features
 
+- Compatible with remote control [Akai RC-21] interface
 - "CD power" button to switch control between PC and Akai
 - Supports receiving signals via serial port from driver to light LEDs (red, yellow, green, blue, white)
 - When Akai control is active then big white LED is turned on and PC does not receive any signals
@@ -32,3 +33,4 @@ For example, send `0b100011` (=35) to light red and yellow LEDs simultaneously.
 This modification determines if PC is disconnected. Firmware is sending "PING" string to PC via serial port every 3 minutes. Driver responds with "PONG" string. If PC is disconnected then all LEDs are turn off.
 
 [mcy 74066]: https://www.datasheetarchive.com/pdf/download.php?id=10e21403acd8e45d1c1a31d420988ef8e63843&type=M
+[akai rc-21]: https://www.hifiengine.com/manual_library/akai/rc-21.shtml
