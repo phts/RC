@@ -11,6 +11,7 @@ IrReceiver irReceiver(PIN_IR);
 Ping ping(PING_INTERVAL);
 bool is_pc_enabled = true;
 bool is_pc_connected = true;
+byte ping_attempts = 0;
 String last_btn = BUTTON_UNKNOWN;
 int last_leds = 0b0;
 
@@ -153,7 +154,19 @@ void setup()
 
 void loop()
 {
-  if (is_pc_connected && !ping.check())
+  if (is_pc_connected && ping_attempts < MAX_PING_ATTEMPTS)
+  {
+    if (ping.check())
+    {
+      ping_attempts = 0;
+    }
+    else
+    {
+      ping_attempts += 1;
+      debug(String("PING failed (attempts: ") + ping_attempts + String(")"));
+    }
+  }
+  if (is_pc_connected && ping_attempts == MAX_PING_ATTEMPTS)
   {
     handle_pc_disconnect();
   }
