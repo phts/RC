@@ -128,7 +128,7 @@ and the value is an action or a list of actions.
     }
     ```
 
-- Emulate key press. Key codes could be retrieved from [robotjs syntax]
+- Emulate key press. Key codes could be retrieved from [robotjs syntax] or [robotjs.cc file]
 
   ```json
   {"key": "space"}
@@ -219,3 +219,4 @@ and the value is an action or a list of actions.
 [ps-list]: https://www.npmjs.com/package/ps-list
 [robotjs syntax]: http://robotjs.io/docs/syntax#keys
 [a button on the remote control]: ../firmware/libraries/yamaha-ras13/yamaha-ras13.h
+[robotjs.cc file]: https://github.com/octalmage/robotjs/blob/v0.6.0/src/robotjs.cc#L289

@@ -30,7 +30,7 @@
     "serialport": "^9.0.0"
   },
   "optionalDependencies": {
-    "robotjs": "^0.5.1"
+    "robotjs": "^0.6.0"
   },
   "devDependencies": {
     "@phts/eslint-config": "^1.8.1",
