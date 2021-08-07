@@ -1,3 +1,10 @@
-libraries/IRremote/
-libraries/SimpleTimer/
+libraries/*
+!libraries/akai-gx-f37/
+!libraries/constants/
+!libraries/debug/
+!libraries/IrReceiver/
+!libraries/leds/
+!libraries/Ping/
+!libraries/pins/
+!libraries/yamaha-ras13/
 output/
