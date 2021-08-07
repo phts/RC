@@ -1,5 +1,7 @@
 # [PHTS RC-01]
 
+Article on Habr: https://habr.com/ru/post/453474/
+
 <image width=500 src="../img/RC-01-circuit.png">
 
 <image width=500 src="../img/RC-01-proto.jpg">
