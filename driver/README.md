@@ -1,6 +1,6 @@
-# arduino-pc-remote-control: driver
+# Driver
 
-This is Node.js application which reads data from serial port written by [arduino]
+This is Node.js application which reads data from serial port sent by [arduino]
 and performs actions mapped for the particular button on a remote control.
 
 ## Install

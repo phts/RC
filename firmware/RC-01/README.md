@@ -1,8 +1,8 @@
-# [PC-only]
+# [PHTS RC-01]
 
-<image width=500 src="../doc/pc-only-circuit.png">
+<image width=500 src="../img/RC-01-circuit.png">
 
-<image width=500 src="../doc/pc-only-proto.jpg">
+<image width=500 src="../img/RC-01-proto.jpg">
 
 ## Parts
 
@@ -12,5 +12,5 @@
 
 Inspired by _[How to Set Up an IR Remote and Receiver on an Arduino]_.
 
-[pc-only]: ./pc-only.ino
+[phts rc-01]: ./RC-01.ino
 [how to set up an ir remote and receiver on an arduino]: http://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/

@@ -1,13 +1,13 @@
-# arduino-pc-remote-control
+# PHTS RC-\*\*
 
-This application is created specially for remote control RAS13.
+This device is created specially for remote control _Yamaha RAS13_.
 However theoretically it supports any other remote controls because all buttons and mappings
 are configurable.
 
 ## [Firmware](./firmware)
 
 Arduino firmware which receives signals from an IR receiver, converts them into human-readable
-strings and writes them to serial port.
+strings and sends them to serial port.
 
 ## [Driver](./driver)
 

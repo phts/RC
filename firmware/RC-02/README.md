@@ -1,12 +1,12 @@
-# [PC + Akai GX-F37 cassette deck]
+# [PHTS RC-02]
 
 Project on EasyEDA: https://easyeda.com/phts/arduino-pc-remote-control
 
-<image width=500 src="../doc/pc-and-akai-circuit.jpg">
+<image width=500 src="../img/RC-02-circuit.jpg">
 
-<image width=500 src="../doc/pc-and-akai-proto.jpg">
+<image width=500 src="../img/RC-02-proto.jpg">
 
-<image width=500 src="../doc/pc-and-akai-real.jpg">
+<image width=500 src="../img/RC-02-real.jpg">
 
 ## Features
 
@@ -32,6 +32,6 @@ For example, send `0b100011` (=35) to light red and yellow LEDs simultaneously.
 
 This modification determines if PC is disconnected. Firmware is sending "PING" string to PC via serial port every 3 minutes. Driver responds with "PONG" string. If PC is disconnected then all LEDs are turn off.
 
-[pc + akai gx-f37 cassette deck]: ./pc-and-akai.ino
+[phts rc-02]: ./RC-02.ino
 [mcy 74066]: https://www.datasheetarchive.com/pdf/download.php?id=10e21403acd8e45d1c1a31d420988ef8e63843&type=M
 [akai rc-21]: https://www.hifiengine.com/manual_library/akai/rc-21.shtml
