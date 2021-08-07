@@ -1,4 +1,4 @@
-# [PC-only](./pc-only.ino)
+# [PC-only]
 
 <image width=500 src="../doc/pc-only-circuit.png">
 
@@ -6,8 +6,11 @@
 
 ## Parts
 
-* VS1838B
+- VS1838B
 
 ---
 
-Inspired by *[How to Set Up an IR Remote and Receiver on an Arduino](http://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/)*.
+Inspired by _[How to Set Up an IR Remote and Receiver on an Arduino]_.
+
+[pc-only]: ./pc-only.ino
+[how to set up an ir remote and receiver on an arduino]: http://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/

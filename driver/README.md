@@ -212,7 +212,7 @@ and the value is an action or a list of actions.
   {"led": []},              // empty array - to switch off all LEDs
   ```
 
-[arduino]: https://github.com/phts/remote-control/tree/master/firmware
+[arduino]: ../firmware
 [robotjs]: https://www.npmjs.com/package/robotjs
 [windows-build-tools]: https://www.npmjs.com/package/windows-build-tools
 [`settings.json`]: ./settings.json.example
