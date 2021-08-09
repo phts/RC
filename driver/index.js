@@ -7,6 +7,7 @@ const SerialPortReader = require('./lib/SerialPortReader')
 const storage = require('./lib/storage')
 const {PING, PONG, FIRMWARE_DEBUG} = require('./lib/constants')
 const debug = require('./lib/debug')
+let lastPing = new Date()
 
 if (process.argv.includes('--debug')) {
   debug.enable()
@@ -36,10 +37,19 @@ const callHandleFn = (button, writeToSerial) => {
   }
   if (button === PING) {
     writeToSerial(PONG)
+    lastPing = new Date()
     return
   }
   const fn = settings.noDebounce.includes(button) ? simpleHandle : debouncedHandle
   return fn(button, writeToSerial)
+}
+
+if (settings.appTimeout) {
+  setInterval(() => {
+    if (new Date().getTime() - lastPing.getTime() > settings.appTimeout) {
+      process.exit(1)
+    }
+  }, settings.appTimeout / 5)
 }
 
 if (settings.initialState) {
