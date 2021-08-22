@@ -7,13 +7,13 @@ const SerialPortReader = require('./lib/SerialPortReader')
 const storage = require('./lib/storage')
 const {PING, PONG, FIRMWARE_DEBUG} = require('./lib/constants')
 const debug = require('./lib/debug')
-let lastPing = new Date()
 
-if (process.argv.includes('--debug')) {
+let lastPing = new Date()
+const settings = getInitialSettings()
+
+if (settings.debug) {
   debug.enable()
 }
-
-const settings = getInitialSettings()
 
 const simpleHandle = (button, writeToSerial) => {
   const actions = getMappings()[button]
