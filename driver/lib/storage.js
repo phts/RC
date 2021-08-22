@@ -21,14 +21,14 @@ function setValues(values) {
   }
 }
 
+function getCurrentValue() {
+  return storage.values[storage.current]
+}
+
 function toggleNextValue() {
   const nextIndex = (storage.current + 1) % storage.values.length
   storage.current = nextIndex
   debug.internal('state: ', getCurrentValue())
-}
-
-function getCurrentValue() {
-  return storage.values[storage.current]
 }
 
 module.exports = {
