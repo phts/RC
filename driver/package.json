@@ -23,9 +23,9 @@
   "homepage": "https://github.com/phts/remote-control#readme",
   "dependencies": {
     "cjson": "^0.5.0",
-    "debounce": "^1.2.0",
+    "debounce": "^1.2.1",
     "optional": "^0.1.4",
-    "ps-list": "^6.3.0",
+    "ps-list": "^7.2.0",
     "require-directory": "^2.1.1",
     "serialport": "^10.4.0"
   },
@@ -33,11 +33,11 @@
     "robotjs": "^0.6.0"
   },
   "devDependencies": {
-    "@phts/eslint-config": "^1.10.1",
+    "@phts/eslint-config": "^2.0.0",
     "@phts/prettier-config": "^1.1.1",
-    "eslint": "^6.8.0",
-    "jest": "^25.2.4",
-    "prettier": "^2.0.2"
+    "eslint": "^8.18.0",
+    "jest": "^28.1.1",
+    "prettier": "^2.7.1"
   },
   "jest": {
     "testEnvironment": "node"
