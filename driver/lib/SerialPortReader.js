@@ -1,13 +1,14 @@
 'use strict'
 
-const SerialPort = require('serialport')
+const {SerialPort} = require('serialport')
+const {ReadlineParser} = require('@serialport/parser-readline')
 const {SERIAL_BAUD_RATE} = require('./constants')
 const debug = require('./debug')
 
 class SerialPortReader {
   constructor(port) {
-    this.serialPort = new SerialPort(port, {baudRate: SERIAL_BAUD_RATE})
-    this.stream = this.serialPort.pipe(new SerialPort.parsers.Readline({delimiter: '\r\n'}))
+    this.serialPort = new SerialPort({path: port, baudRate: SERIAL_BAUD_RATE})
+    this.stream = this.serialPort.pipe(new ReadlineParser({delimiter: '\r\n'}))
   }
 
   start(handler) {
