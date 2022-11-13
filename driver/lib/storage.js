@@ -2,32 +2,20 @@
 
 const debug = require('./debug')
 
-let storage = null
-
-function isSameValues(newValues) {
-  if (!storage) {
-    return false
-  }
-  return JSON.stringify(storage.values) === JSON.stringify(newValues)
-}
-
-function initStorage(values) {
-  storage = {current: -1, values}
-}
+const storage = {current: null, values: []}
 
 function setValues(values) {
-  if (!isSameValues(values)) {
-    initStorage(values)
-  }
+  storage.values = values
 }
 
 function getCurrentValue() {
-  return storage.values[storage.current]
+  return storage.values.find((x) => x === storage.current)
 }
 
 function toggleNextValue() {
-  const nextIndex = (storage.current + 1) % storage.values.length
-  storage.current = nextIndex
+  const currentIndex = storage.values.findIndex((x) => x === storage.current)
+  const nextIndex = (currentIndex + 1) % storage.values.length
+  storage.current = storage.values[nextIndex]
   debug.internal('state: ', getCurrentValue())
 }
 
