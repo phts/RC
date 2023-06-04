@@ -15,7 +15,7 @@ application &mdash; if you don't use keyboard/mouse actions then this step is no
     Run in PowerShell or CMD.exe:
 
     ```bash
-    $ npm install --global --production windows-build-tools
+    npm install --global --production windows-build-tools
     ```
 
 - Mac
@@ -30,13 +30,13 @@ application &mdash; if you don't use keyboard/mouse actions then this step is no
   - libxtst-dev and libpng++-dev
 
     ```bash
-    $ sudo apt-get install libxtst-dev libpng++-dev
+    sudo apt-get install libxtst-dev libpng++-dev
     ```
 
 Then install local dependencies:
 
 ```bash
-$ npm i
+npm i
 ```
 
 ## Usage
@@ -44,14 +44,22 @@ $ npm i
 - Run in normal mode:
 
   ```bash
-  $ npm start
+  npm start
   ```
 
 - Run in debug mode:
 
   ```bash
-  $ npm run start:debug
+  npm run start:debug
   ```
+
+### Test mode
+
+This will loop over leds and exit. Just for testing connectivity.
+
+```bash
+npm run start:test-mode
+```
 
 ## Configuration
 

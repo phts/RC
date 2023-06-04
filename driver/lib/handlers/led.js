@@ -1,11 +1,12 @@
 'use strict'
 
-const LED_OVERHEAD = 0b100000
-const LED_RED = 0b00001
-const LED_YELLOW = 0b00010
-const LED_GREEN = 0b00100
-const LED_BLUE = 0b01000
-const LED_WHITE = 0b10000
+const LED_OVERHEAD = 0b1000000
+const LED_RED = 0b000001
+const LED_YELLOW = 0b000010
+const LED_GREEN = 0b000100
+const LED_BLUE = 0b001000
+const LED_WHITE = 0b010000
+const LED_AKAI = 0b100000
 
 const COLOR_TO_LED = {
   red: LED_RED,
@@ -13,6 +14,7 @@ const COLOR_TO_LED = {
   green: LED_GREEN,
   blue: LED_BLUE,
   white: LED_WHITE,
+  akai: LED_AKAI,
 }
 
 function covertColorsToLeds(colors) {

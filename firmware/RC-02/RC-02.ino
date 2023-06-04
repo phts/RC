@@ -116,6 +116,7 @@ void handle_leds(int data)
   (leds & LED_GREEN) ? led_on(PIN_GREEN) : led_off(PIN_GREEN);
   (leds & LED_BLUE) ? led_on(PIN_BLUE) : led_off(PIN_BLUE);
   (leds & LED_WHITE) ? led_on(PIN_WHITE) : led_off(PIN_WHITE);
+  (leds & LED_AKAI) ? led_on(PIN_AKAI) : led_off(PIN_AKAI);
   last_leds = data;
 }
 
@@ -175,6 +176,7 @@ void loop()
 
   if (Serial.available())
   {
+    debug("available");
     int data = Serial.read();
     handle_leds(data);
   }

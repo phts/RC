@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "start": "node index.js",
     "start:debug": "npm start -- --debug",
+    "start:test-mode": "npm start -- --test-mode",
     "test": "jest"
   },
   "repository": {
