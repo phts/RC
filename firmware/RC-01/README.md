@@ -1,4 +1,4 @@
-# [PHTS RC-01]
+# PHTS RC-01
 
 Article on Habr: https://habr.com/ru/post/453474/
 
@@ -14,5 +14,4 @@ Article on Habr: https://habr.com/ru/post/453474/
 
 Inspired by _[How to Set Up an IR Remote and Receiver on an Arduino]_.
 
-[phts rc-01]: ./RC-01.ino
 [how to set up an ir remote and receiver on an arduino]: http://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/
