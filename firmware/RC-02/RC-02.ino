@@ -1,13 +1,13 @@
-#include "constants.h"
 #include "yamaha-ras13.h"
-#include "akai-gx-f37.h"
-#include "pins.h"
-#include "leds.h"
-#include "IrReceiver.h"
-#include "Ping.h"
-#include "debug.h"
+#include "lib/settings.h"
+#include "lib/akai-gx-f37.h"
+#include "lib/debug.h"
+#include "lib/ir.h"
+#include "lib/leds.h"
+#include "lib/ping.h"
+#include "lib/pins.h"
 
-IrReceiver irReceiver(PIN_IR);
+IR ir(PIN_IR);
 Ping ping(PING_INTERVAL);
 bool is_pc_enabled = true;
 bool is_pc_connected = true;
@@ -149,7 +149,7 @@ void setup()
 {
   setup_pins();
   Serial.begin(SERIAL_BAUD_RATE);
-  irReceiver.setup();
+  ir.setup();
   ping.setup();
 }
 
@@ -172,7 +172,7 @@ void loop()
     handle_pc_disconnect();
   }
 
-  irReceiver.receive(handle_ir_code);
+  ir.receive(handle_ir_code);
 
   if (Serial.available())
   {

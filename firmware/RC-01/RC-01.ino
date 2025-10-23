@@ -1,5 +1,5 @@
 #include <IRremote.h>
-#include "constants.h"
+#include "lib/settings.h"
 #include "yamaha-ras13.h"
 
 const int RECV_PIN = 8;

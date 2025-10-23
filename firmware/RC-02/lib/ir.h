@@ -1,6 +1,6 @@
 #include <IRremote.h>
 
-class IrReceiver
+class IR
 {
   typedef void (*Callback)(const unsigned long);
 
@@ -9,7 +9,7 @@ private:
   decode_results results;
 
 public:
-  IrReceiver(int pin) : irrecv(pin) {}
+  IR(int pin) : irrecv(pin) {}
 
   void setup()
   {
