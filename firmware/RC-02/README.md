@@ -39,6 +39,13 @@ For example, send `0b100011` (=35) to light red and yellow LEDs simultaneously.
 
 This modification determines if PC is disconnected. Firmware is sending "PING" string to PC via serial port every 3 minutes. Driver responds with "PONG" string. If PC is disconnected then all LEDs are turn off.
 
+## Dependencies
+
+- [IRremote] v2.5.0
+- [SimpleTimer]
+
 [OSHWLab/phts/arduino-pc-remote-control]: https://oshwlab.com/phts/arduino-pc-remote-control
 [mcy 74066]: https://www.datasheetarchive.com/pdf/download.php?id=10e21403acd8e45d1c1a31d420988ef8e63843&type=M
 [akai rc-21]: https://www.hifiengine.com/manual_library/akai/rc-21.shtml
+[IRremote]: https://github.com/Arduino-IRremote/Arduino-IRremote
+[SimpleTimer]: https://github.com/kiryanenko/SimpleTimer
