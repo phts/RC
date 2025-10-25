@@ -150,7 +150,11 @@ void setup()
   setup_pins();
   Serial.begin(SERIAL_BAUD_RATE);
   ir.setup();
-  ping.setup();
+  if (NO_PC) {
+    handle_pc_disconnect();
+  } else {
+    ping.setup();
+  }
 }
 
 void loop()
